@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "terrariafabric",
+  "version": "${version}",
+  "name": "TerrariaFabric",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/terrariafabric/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "bhw.voident.xyz.terrariafabric.client.TerrariafabricDataGenerator"
+    ],
+    "client": [
+      "bhw.voident.xyz.terrariafabric.client.TerrariafabricClient"
+    ],
+    "main": [
+      "bhw.voident.xyz.terrariafabric.Terrariafabric"
+    ]
+  },
+  "mixins": [
+    "terrariafabric.mixins.json",
+    {
+      "config": "terrariafabric.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
