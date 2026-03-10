@@ -4,6 +4,8 @@
   "package": "bhw.voident.xyz.terrariafabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "server.PlayerSleepMixin",
+    "server.SleepStatusMixin"
   ],
   "injectors": {
     "defaultRequire": 1

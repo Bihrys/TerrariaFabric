@@ -1,6 +1,7 @@
 package bhw.voident.xyz.terrariafabric;
 
 import bhw.voident.xyz.terrariafabric.command.HouseCommand;
+import bhw.voident.xyz.terrariafabric.world.time.sleep.SleepTimeAccelerator;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,6 +70,7 @@ public class Terrariafabric implements ModInitializer {
     @Override
     public void onInitialize() {
         HouseCommand.register();
+        SleepTimeAccelerator.register();
         LOGGER.info("TerrariaFabric house check command registered: /checkhouse");
     }
 }
