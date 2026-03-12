@@ -1,5 +1,6 @@
 package bhw.voident.xyz.terrariafabric.mixin.server;
 
+import bhw.voident.xyz.terrariafabric.player.sleep.DaySleepFlag;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,11 +12,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
 
 @Mixin(Player.class)
-public abstract class PlayerSleepMixin {
+public abstract class PlayerSleepMixin implements DaySleepFlag {
+
+    @Unique
+    private boolean terrariafabric$daySleepForced;
 
     @SuppressWarnings("resource")
     @Inject(method = "startSleepInBed", at = @At("RETURN"), cancellable = true)
@@ -49,7 +55,45 @@ public abstract class PlayerSleepMixin {
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.setRespawnPosition(serverPlayer.serverLevel().dimension(), pos, serverPlayer.getYRot(), false, true);
         }
+        terrariafabric$daySleepForced = true;
 
         cir.setReturnValue(Either.right(Unit.INSTANCE));
+    }
+
+    @Inject(method = "stopSleeping", at = @At("HEAD"))
+    private void terrariafabric$clearDaySleepFlag(CallbackInfo ci) {
+        terrariafabric$daySleepForced = false;
+    }
+
+    @Inject(method = "stopSleepInBed", at = @At("HEAD"))
+    private void terrariafabric$clearDaySleepFlagOnBedExit(boolean skipSleepTimer, boolean updateSleepingPlayers, CallbackInfo ci) {
+        terrariafabric$daySleepForced = false;
+    }
+
+    @org.spongepowered.asm.mixin.injection.Redirect(
+        method = "tick",
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;stopSleepInBed(ZZ)V")
+    )
+    private void terrariafabric$keepSleepingInDay(Player player, boolean skipSleepTimer, boolean updateSleepingPlayers) {
+        if (terrariafabric$daySleepForced && player.level().isDay()) {
+            Optional<BlockPos> bedPos = player.getSleepingPos();
+            if (bedPos.isPresent()) {
+                BlockState state = player.level().getBlockState(bedPos.get());
+                if (state.getBlock() instanceof BedBlock) {
+                    return;
+                }
+            }
+        }
+        player.stopSleepInBed(skipSleepTimer, updateSleepingPlayers);
+    }
+
+    @Override
+    public void terrariafabric$setDaySleepForced(boolean value) {
+        this.terrariafabric$daySleepForced = value;
+    }
+
+    @Override
+    public boolean terrariafabric$isDaySleepForced() {
+        return terrariafabric$daySleepForced;
     }
 }
