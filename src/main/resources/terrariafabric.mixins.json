@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "server.PlayerSleepMixin",
+    "server.ServerPlayerSleepMixin",
     "server.SleepStatusMixin"
   ],
   "injectors": {
