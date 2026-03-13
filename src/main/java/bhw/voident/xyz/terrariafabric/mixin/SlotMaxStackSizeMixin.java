@@ -13,7 +13,7 @@ public abstract class SlotMaxStackSizeMixin {
     @Unique
     private static final int TERRARIAFABRIC_MAX_STACK_SIZE = 9999;
 
-    @Inject(method = "getMaxStackSize", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getMaxStackSize()I", at = @At("HEAD"), cancellable = true)
     private void terrariafabric$raiseSlotMaxStackSize(CallbackInfoReturnable<Integer> cir) {
         cir.setReturnValue(TERRARIAFABRIC_MAX_STACK_SIZE);
     }
