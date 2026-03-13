@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ContainerMaxStackSizeMixin",
+    "ItemStackCountCodecMixin",
     "ItemStackMaxStackSizeMixin",
     "SlotMaxStackSizeMixin",
     "server.PlayerSleepMixin",
