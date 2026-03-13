@@ -4,6 +4,8 @@
   "package": "bhw.voident.xyz.terrariafabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "ItemStackMaxStackSizeMixin",
+    "SlotMaxStackSizeMixin",
     "server.PlayerSleepMixin",
     "server.ServerPlayerSleepMixin",
     "server.SleepStatusMixin"
