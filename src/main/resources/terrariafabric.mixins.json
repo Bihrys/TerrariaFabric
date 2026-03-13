@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ContainerMaxStackSizeMixin",
+    "InventoryAutoStackMixin",
     "ItemStackCountCodecMixin",
     "ItemStackMaxStackSizeMixin",
     "SlotMaxStackSizeMixin",

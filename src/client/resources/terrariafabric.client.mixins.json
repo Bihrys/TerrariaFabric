@@ -4,6 +4,7 @@
   "package": "bhw.voident.xyz.terrariafabric.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "CreativeModeInventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

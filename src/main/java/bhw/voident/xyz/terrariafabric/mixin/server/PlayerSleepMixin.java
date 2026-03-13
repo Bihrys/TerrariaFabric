@@ -97,3 +97,5 @@ public abstract class PlayerSleepMixin implements DaySleepFlag {
         return terrariafabric$daySleepForced;
     }
 }
+
+
