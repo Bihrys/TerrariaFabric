@@ -70,6 +70,7 @@ public abstract class PlayerSleepMixin implements DaySleepFlag {
         terrariafabric$daySleepForced = false;
     }
 
+    @SuppressWarnings("resource")
     @org.spongepowered.asm.mixin.injection.Redirect(
         method = "tick",
         at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;stopSleepInBed(ZZ)V")
@@ -97,5 +98,4 @@ public abstract class PlayerSleepMixin implements DaySleepFlag {
         return terrariafabric$daySleepForced;
     }
 }
-
 
