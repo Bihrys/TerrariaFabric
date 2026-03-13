@@ -1,6 +1,5 @@
 package bhw.voident.xyz.terrariafabric.mixin;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,7 +16,7 @@ public class ItemStackMaxStackSizeMixin {
     @Inject(method = "getMaxStackSize", at = @At("RETURN"), cancellable = true)
     private void terrariafabric$raiseMaxStackSize(CallbackInfoReturnable<Integer> cir) {
         int original = cir.getReturnValue();
-        if (original == Item.DEFAULT_MAX_STACK_SIZE) {
+        if (original > 1) {
             cir.setReturnValue(TERRARIAFABRIC_MAX_STACK_SIZE);
         }
     }
