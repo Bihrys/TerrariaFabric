@@ -9,6 +9,7 @@
     "ItemStackCountCodecMixin",
     "ItemStackMaxStackSizeMixin",
     "SlotMaxStackSizeMixin",
+    "server.PlayerMaxHeartsMixin",
     "server.PlayerSleepMixin",
     "server.ServerPlayerSleepMixin",
     "server.SleepStatusMixin"

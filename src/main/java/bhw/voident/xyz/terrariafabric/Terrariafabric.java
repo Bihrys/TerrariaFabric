@@ -1,8 +1,12 @@
 package bhw.voident.xyz.terrariafabric;
 
 import bhw.voident.xyz.terrariafabric.command.HouseCommand;
+import bhw.voident.xyz.terrariafabric.item.TerrariafabricItems;
+import bhw.voident.xyz.terrariafabric.player.TerrariafabricHealth;
+import bhw.voident.xyz.terrariafabric.player.TerrariafabricMaxHearts;
 import bhw.voident.xyz.terrariafabric.world.time.sleep.SleepTimeAccelerator;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +22,7 @@ public class Terrariafabric implements ModInitializer {
      * registry - 注册键/工具/常量 / registry keys/helpers/constants
      * util - 工具类 / shared utilities
      *
-     * npc - NPC 总系统 / core NPC system
+     * npc - NPC  / core NPC system
      * npc/ai - NPC AI / NPC AI and behavior
      * npc/home - 房屋检测与分配 / housing detection/assignment
      * npc/shop - 商店库存与价格 / shop inventory and pricing
@@ -69,8 +73,22 @@ public class Terrariafabric implements ModInitializer {
      */
     @Override
     public void onInitialize() {
+        TerrariafabricItems.register();
         HouseCommand.register();
         SleepTimeAccelerator.register();
-        LOGGER.info("TerrariaFabric 房屋检测指令已注册：/checkhouse");
+        ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
+            if (!(oldPlayer instanceof TerrariafabricMaxHearts oldHearts)) {
+                return;
+            }
+            if (!(newPlayer instanceof TerrariafabricMaxHearts newHearts)) {
+                return;
+            }
+            int hearts = oldHearts.terrariafabric$getMaxHearts();
+            if (hearts < TerrariafabricHealth.DEFAULT_HEARTS) {
+                hearts = TerrariafabricHealth.DEFAULT_HEARTS;
+            }
+            newHearts.terrariafabric$setMaxHearts(hearts);
+        });
+        LOGGER.info("Terraria 房屋检测指令已注册：/checkhouse");
     }
 }
