@@ -8,6 +8,7 @@
     "InventoryAutoStackMixin",
     "ItemStackCountCodecMixin",
     "ItemStackMaxStackSizeMixin",
+    "ItemStackNoDurabilityMixin",
     "SlotMaxStackSizeMixin",
     "server.PlayerMaxHeartsMixin",
     "server.PlayerSleepMixin",
