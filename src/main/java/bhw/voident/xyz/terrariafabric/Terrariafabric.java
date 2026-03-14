@@ -71,6 +71,6 @@ public class Terrariafabric implements ModInitializer {
     public void onInitialize() {
         HouseCommand.register();
         SleepTimeAccelerator.register();
-        LOGGER.info("TerrariaFabric house check command registered: /checkhouse");
+        LOGGER.info("TerrariaFabric 房屋检测指令已注册：/checkhouse");
     }
 }

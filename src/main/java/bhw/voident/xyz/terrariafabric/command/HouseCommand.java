@@ -37,7 +37,7 @@ public final class HouseCommand {
     private static int execute(CommandSourceStack source) {
         Entity entity = source.getEntity();
         if (!(entity instanceof ServerPlayer player)) {
-            source.sendFailure(Component.literal("Only players can use /checkhouse."));
+            source.sendFailure(Component.literal("只有玩家可以使用 /checkhouse。"));
             return 0;
         }
 
@@ -50,7 +50,7 @@ public final class HouseCommand {
         BlockPos start = findStartingAir(player);
 
         if (start == null) {
-            send(player, "No valid start block found nearby.");
+            send(player, "这不是有效的房屋。");
             return;
         }
 
@@ -64,8 +64,8 @@ public final class HouseCommand {
         int carpetBlocks = 0;
         int passThroughOther = 0;
         boolean hasDoor = false;
-        boolean hasWorkbench = false;
-        boolean hasBed = false;
+        boolean hasTable = false;
+        boolean hasChair = false;
         boolean hasAnyLight = false;
         boolean leaked = false;
         boolean tooLarge = false;
@@ -114,11 +114,11 @@ public final class HouseCommand {
                 if (idPath.endsWith("_door")) {
                     hasDoor = true;
                 }
-                if ("crafting_table".equals(idPath)) {
-                    hasWorkbench = true;
+                if (isTable(idPath)) {
+                    hasTable = true;
                 }
-                if (idPath.endsWith("_bed")) {
-                    hasBed = true;
+                if (isChair(idPath)) {
+                    hasChair = true;
                 }
                 if (isLightSource(neighborState)) {
                     hasAnyLight = true;
@@ -131,36 +131,32 @@ public final class HouseCommand {
         }
 
         int totalAvailable = airBlocks + nonFullLightBlocks + carpetBlocks + passThroughOther;
-        boolean isValid = !leaked && !tooLarge && totalAvailable >= 20 && hasDoor && hasWorkbench && hasBed && hasAnyLight;
-
-        if (isValid) {
-            send(player, "Room is valid.");
+        boolean structuralInvalid = leaked || tooLarge || totalAvailable < 20;
+        if (structuralInvalid) {
+            send(player, "这不是有效的房屋。");
             return;
         }
 
         List<String> missing = new ArrayList<>();
-        if (tooLarge) {
-            missing.add("room too large");
-        }
-        if (leaked) {
-            missing.add("room not enclosed");
-        }
-        if (totalAvailable < 20) {
-            missing.add("room too small");
-        }
         if (!hasDoor) {
-            missing.add("missing door");
+            missing.add("门");
         }
-        if (!hasWorkbench) {
-            missing.add("missing crafting table");
+        if (!hasTable) {
+            missing.add("桌子");
         }
-        if (!hasBed) {
-            missing.add("missing bed");
+        if (!hasChair) {
+            missing.add("床");
         }
         if (!hasAnyLight) {
-            missing.add("missing light source");
+            missing.add("光源");
         }
-        send(player, "Room is invalid: " + String.join(", ", missing));
+
+        if (missing.isEmpty()) {
+            send(player, "此房屋很适合。");
+            return;
+        }
+
+        send(player, buildMissingMessage(missing));
     }
 
     private static BlockPos findStartingAir(ServerPlayer player) {
@@ -231,6 +227,30 @@ public final class HouseCommand {
                 || name.contains("sea_lantern")
                 || name.contains("glowstone")
                 || name.contains("shroomlight");
+    }
+
+    private static boolean isTable(String idPath) {
+        return "crafting_table".equals(idPath) || idPath.endsWith("_table") || idPath.contains("workbench");
+    }
+
+    private static boolean isChair(String idPath) {
+        return idPath.endsWith("_bed")
+                || idPath.contains("chair")
+                || idPath.contains("stool")
+                || idPath.contains("seat")
+                || idPath.contains("sofa")
+                || idPath.contains("couch")
+                || idPath.contains("bench");
+    }
+
+    private static String buildMissingMessage(List<String> missing) {
+        return switch (missing.size()) {
+            case 1 -> "这个房屋缺少" + missing.get(0) + "。";
+            case 2 -> "这个房屋缺少" + missing.get(0) + "和" + missing.get(1) + "。";
+            case 3 -> "这个房屋缺少" + missing.get(0) + "、" + missing.get(1) + "和" + missing.get(2) + "。";
+            case 4 -> "这个房屋缺少" + missing.get(0) + "、" + missing.get(1) + "、" + missing.get(2) + "和" + missing.get(3) + "。";
+            default -> "这不是有效的房屋。";
+        };
     }
 
     private static String getBlockIdPath(BlockState state) {
