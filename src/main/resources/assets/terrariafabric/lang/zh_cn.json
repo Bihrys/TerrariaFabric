@@ -1,3 +1,19 @@
 {
-  "item.terrariafabric.life_crystal": "生命水晶"
+  "item.terrariafabric.life_crystal": "生命水晶",
+  "entity.terrariafabric.guide": "向导",
+  "message.terrariafabric.house.only_player": "只有玩家可以使用 /checkhouse。",
+  "message.terrariafabric.house.invalid": "这不是有效的房屋。",
+  "message.terrariafabric.house.suitable": "这间房屋很适合。",
+  "message.terrariafabric.house.occupied": "这间房屋已被占领。",
+  "message.terrariafabric.house.missing.door": "门",
+  "message.terrariafabric.house.missing.table": "桌子",
+  "message.terrariafabric.house.missing.chair": "椅子",
+  "message.terrariafabric.house.missing.light": "光源",
+  "message.terrariafabric.house.missing.one": "这间房屋缺少%s。",
+  "message.terrariafabric.house.missing.two": "这间房屋缺少%s和%s。",
+  "message.terrariafabric.house.missing.three": "这间房屋缺少%s、%s和%s。",
+  "message.terrariafabric.house.missing.four": "这间房屋缺少%s、%s、%s和%s。",
+  "message.terrariafabric.guide.only_player": "只有玩家可以使用 /向导。",
+  "message.terrariafabric.guide.bound": "向导已入住此房屋。",
+  "message.terrariafabric.guide.wait_day": "向导会在白天入住这间房屋。"
 }

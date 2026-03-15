@@ -1,3 +1,19 @@
 {
-  "item.terrariafabric.life_crystal": "Life Crystal"
+  "item.terrariafabric.life_crystal": "Life Crystal",
+  "entity.terrariafabric.guide": "Guide",
+  "message.terrariafabric.house.only_player": "Only players can use /checkhouse.",
+  "message.terrariafabric.house.invalid": "This is not a valid house.",
+  "message.terrariafabric.house.suitable": "This housing is suitable.",
+  "message.terrariafabric.house.occupied": "This housing is already occupied.",
+  "message.terrariafabric.house.missing.door": "a door",
+  "message.terrariafabric.house.missing.table": "a table",
+  "message.terrariafabric.house.missing.chair": "a chair",
+  "message.terrariafabric.house.missing.light": "a light source",
+  "message.terrariafabric.house.missing.one": "This housing is missing %s.",
+  "message.terrariafabric.house.missing.two": "This housing is missing %s and %s.",
+  "message.terrariafabric.house.missing.three": "This housing is missing %s, %s, and %s.",
+  "message.terrariafabric.house.missing.four": "This housing is missing %s, %s, %s, and %s.",
+  "message.terrariafabric.guide.only_player": "Only players can use /向导.",
+  "message.terrariafabric.guide.bound": "The Guide has moved in.",
+  "message.terrariafabric.guide.wait_day": "The Guide will move in during the day."
 }
