@@ -5,12 +5,14 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ContainerMaxStackSizeMixin",
+    "HousingBlockItemMixin",
     "InventoryAutoStackMixin",
     "ItemStackCountCodecMixin",
     "ItemStackMaxStackSizeMixin",
     "ItemStackNoDurabilityMixin",
     "SlotMaxStackSizeMixin",
     "server.PlayerMaxHeartsMixin",
+    "server.ServerPlayerGameModeHousingMixin",
     "server.PlayerSleepMixin",
     "server.ServerPlayerSleepMixin",
     "server.SleepStatusMixin"

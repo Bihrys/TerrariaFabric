@@ -3,8 +3,8 @@ package bhw.voident.xyz.terrariafabric.command;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseCheckResult;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseDetector;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseMessages;
-import bhw.voident.xyz.terrariafabric.npc.home.HousingData;
-import bhw.voident.xyz.terrariafabric.npc.spawn.GuideSpawner;
+import bhw.voident.xyz.terrariafabric.npc.home.HousingRegistry;
+import bhw.voident.xyz.terrariafabric.npc.spawn.NpcResidenceManager;
 import com.mojang.brigadier.Command;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
@@ -48,15 +48,12 @@ public final class HouseCommand {
             return;
         }
 
-        HousingData data = HousingData.get(player.serverLevel());
-        HousingData.RoomRecord room = data.getOrCreate(result.room());
+        HousingRegistry registry = HousingRegistry.get(player.serverLevel());
+        HousingRegistry.RoomRecord room = registry.syncRoom(result.room(), player.serverLevel().getGameTime());
         if (room.isOccupied()) {
-            if (HousingData.NPC_GUIDE.equals(room.getOccupantId()) && !room.isManual()) {
-                if (GuideSpawner.findGuide(player.serverLevel()) == null) {
-                    data.setOccupant(room, null, false);
-                    player.sendSystemMessage(Component.translatable("message.terrariafabric.house.suitable"));
-                    return;
-                }
+            if (!NpcResidenceManager.reconcileRoom(player.serverLevel(), room)) {
+                player.sendSystemMessage(Component.translatable("message.terrariafabric.house.suitable"));
+                return;
             }
             player.sendSystemMessage(Component.translatable("message.terrariafabric.house.occupied"));
             return;

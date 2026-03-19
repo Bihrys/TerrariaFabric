@@ -15,5 +15,6 @@
   "message.terrariafabric.house.missing.four": "这间房屋缺少%s、%s、%s和%s。",
   "message.terrariafabric.guide.only_player": "只有玩家可以使用 /向导。",
   "message.terrariafabric.guide.bound": "向导已入住此房屋。",
-  "message.terrariafabric.guide.wait_day": "向导会在白天入住这间房屋。"
+  "message.terrariafabric.guide.wait_day": "向导会在白天入住这间房屋。",
+  "message.terrariafabric.guide.spawn_failed": "向导暂时无法出现在这间房屋里。"
 }

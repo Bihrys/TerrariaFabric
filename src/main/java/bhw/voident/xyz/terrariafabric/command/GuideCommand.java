@@ -1,11 +1,11 @@
 package bhw.voident.xyz.terrariafabric.command;
 
-import bhw.voident.xyz.terrariafabric.entity.GuideEntity;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseCheckResult;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseDetector;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseMessages;
-import bhw.voident.xyz.terrariafabric.npc.home.HousingData;
-import bhw.voident.xyz.terrariafabric.npc.spawn.GuideSpawner;
+import bhw.voident.xyz.terrariafabric.npc.home.HousingRegistry;
+import bhw.voident.xyz.terrariafabric.npc.definition.NpcDefinitions;
+import bhw.voident.xyz.terrariafabric.npc.spawn.NpcResidenceManager;
 import com.mojang.brigadier.Command;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
@@ -46,33 +46,20 @@ public final class GuideCommand {
             return 0;
         }
 
-        HousingData data = HousingData.get(level);
-        HousingData.RoomRecord room = data.getOrCreate(result.room());
-        String occupant = room.getOccupantId();
-        if (occupant != null && !HousingData.NPC_GUIDE.equals(occupant)) {
+        HousingRegistry registry = HousingRegistry.get(level);
+        HousingRegistry.RoomRecord room = registry.syncRoom(result.room(), level.getGameTime());
+        String occupant = room.occupantId();
+        if (occupant != null && !NpcDefinitions.GUIDE.id().equals(occupant)) {
             player.sendSystemMessage(Component.translatable("message.terrariafabric.house.occupied"));
             return 0;
         }
 
-        data.clearOccupant(HousingData.NPC_GUIDE);
-        data.setOccupant(room, HousingData.NPC_GUIDE, true);
-
-        GuideEntity guide = GuideSpawner.findGuide(level);
-        if (guide != null) {
-            GuideSpawner.assignGuideToRoom(guide, room);
+        if (NpcResidenceManager.assignRoom(level, NpcDefinitions.GUIDE, room, true, true)) {
             player.sendSystemMessage(Component.translatable("message.terrariafabric.guide.bound"));
             return Command.SINGLE_SUCCESS;
         }
 
-        if (level.isDay()) {
-            GuideEntity spawned = GuideSpawner.spawnGuideInRoom(level, room);
-            if (spawned != null) {
-                player.sendSystemMessage(Component.translatable("message.terrariafabric.guide.bound"));
-                return Command.SINGLE_SUCCESS;
-            }
-        }
-
-        player.sendSystemMessage(Component.translatable("message.terrariafabric.guide.wait_day"));
+        player.sendSystemMessage(Component.translatable("message.terrariafabric.guide.spawn_failed"));
         return Command.SINGLE_SUCCESS;
     }
 }

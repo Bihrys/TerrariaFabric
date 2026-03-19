@@ -1,7 +1,10 @@
 package bhw.voident.xyz.terrariafabric.entity;
 
+import bhw.voident.xyz.terrariafabric.npc.definition.NpcDefinitions;
+import bhw.voident.xyz.terrariafabric.npc.spawn.NpcResidenceManager;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -85,6 +88,14 @@ public class GuideEntity extends PathfinderMob {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.VILLAGER_DEATH;
+    }
+
+    @Override
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
+        if (level() instanceof ServerLevel serverLevel) {
+            NpcResidenceManager.onNpcDeath(serverLevel, NpcDefinitions.GUIDE.id(), getUUID());
+        }
     }
 
     @Override
