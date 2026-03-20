@@ -14,6 +14,7 @@
 * **住房检测与登记系统**
 * **泰拉式睡觉时间加速**
 * **向导 NPC**
+* **泰拉货币系统（铜/银/金/铂）**
 
 ---
 
@@ -80,6 +81,8 @@
   存放物品逻辑和物品注册。
 * `item/LifeCrystalItem.java`  
   生命水晶逻辑。使用后把玩家最大心数 +1，并按当前设定回血。
+* `item/TerrariaCoinItem.java`  
+  货币物品逻辑。当前支持银币手动拆分为铜币（潜行右键）。
 * `item/TerrariafabricItems.java`  
   统一注册物品，并把生命水晶加入创造物品栏。
 * `item/accessory/`  
@@ -98,6 +101,8 @@
   玩家放置住房相关方块后，通知住房系统把附近房间标记为待复检。
 * `mixin/InventoryAutoStackMixin.java`  
   玩家背包从存档读取后自动压缩同类物品堆叠，避免登录后同类物品被拆成很多组。
+* `mixin/InventoryCoinAutoConvertMixin.java`  
+  玩家背包变化时立即自动换币（覆盖拾取、Shift 放入、从容器取出）。
 * `mixin/ItemStackCountCodecMixin.java`  
   放宽 ItemStack 数量的编解码上限，避免 9999 堆叠在存档/网络阶段出问题。
 * `mixin/ItemStackMaxStackSizeMixin.java`  
@@ -196,6 +201,10 @@
   睡觉时间逻辑目录。
 * `world/time/sleep/SleepTimeAccelerator.java`  
   实现泰拉式“睡觉加速时间”，而不是原版直接跳过整段夜晚。
+* `currency/`  
+  货币系统目录。
+* `currency/CoinCurrencySystem.java`  
+  负责击杀掉币、自动升阶换币和手动拆分后的短暂停止自动换币。
 
 ### 3. `src/client/java/bhw/voident/xyz/terrariafabric/` 目录
 
@@ -234,8 +243,24 @@
   中文文本。
 * `src/main/resources/assets/terrariafabric/models/item/life_crystal.json`  
   生命水晶物品模型。
+* `src/main/resources/assets/terrariafabric/models/item/copper_coin.json`  
+  铜币物品模型。
+* `src/main/resources/assets/terrariafabric/models/item/silver_coin.json`  
+  银币物品模型。
+* `src/main/resources/assets/terrariafabric/models/item/gold_coin.json`  
+  金币物品模型。
+* `src/main/resources/assets/terrariafabric/models/item/platinum_coin.json`  
+  铂金币物品模型。
 * `src/main/resources/assets/terrariafabric/textures/item/life_crystal.png`  
   生命水晶贴图。
+* `src/main/resources/assets/terrariafabric/textures/item/copper_coin.png`  
+  铜币贴图。
+* `src/main/resources/assets/terrariafabric/textures/item/silver_coin.png`  
+  银币贴图。
+* `src/main/resources/assets/terrariafabric/textures/item/gold_coin.png`  
+  金币贴图。
+* `src/main/resources/assets/terrariafabric/textures/item/platinum_coin.png`  
+  铂金币贴图。
 * `src/main/resources/assets/terrariafabric/textures/entity/guide.png`  
   向导贴图。
 * `src/main/resources/data/terrariafabric/npc/names.json`  
@@ -252,6 +277,17 @@
 ---
 
 ## 更新日志
+
+### 2026.3.20（货币系统补充）
+
+* 新增铜币、银币、金币、铂金币
+* 兑换关系：`100 铜 = 1 银`，`100 银 = 1 金`，`100 金 = 1 铂`
+* 铜/银/金币最大堆叠 `100`，铂金币最大堆叠 `9999`
+* 击败敌对生物会掉落钱币
+* 玩家背包变化时立即自动换币（覆盖拾取、Shift 放入、从容器取出）
+* 新增银币手动拆分铜币：潜行右键银币
+
+---
 
 ### 2026.3.20
 
