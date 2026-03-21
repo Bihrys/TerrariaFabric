@@ -5,6 +5,12 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class NpcDefinitions {
 
     public static final NpcDefinition GUIDE = new GuideNpcDefinition();
@@ -27,3 +33,4 @@ public final class NpcDefinitions {
         return BY_ID.get(id);
     }
 }
+

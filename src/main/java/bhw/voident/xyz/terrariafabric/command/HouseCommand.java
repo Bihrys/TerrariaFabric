@@ -12,6 +12,12 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HouseCommand {
 
     private HouseCommand() {
@@ -61,3 +67,4 @@ public final class HouseCommand {
         player.sendSystemMessage(Component.translatable("message.terrariafabric.house.suitable"));
     }
 }
+

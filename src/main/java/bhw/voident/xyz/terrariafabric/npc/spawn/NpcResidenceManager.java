@@ -17,6 +17,12 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.UUID;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class NpcResidenceManager {
 
     private static final double SNAP_DISTANCE_SQR = 24.0 * 24.0;
@@ -232,3 +238,4 @@ public final class NpcResidenceManager {
         return found;
     }
 }
+

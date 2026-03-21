@@ -8,6 +8,12 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HousingDirtyQueue {
 
     private final Deque<BlockPos> anchors = new ArrayDeque<>();
@@ -45,3 +51,4 @@ public final class HousingDirtyQueue {
         }
     }
 }
+

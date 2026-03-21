@@ -14,6 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
+/**
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ */
 public class ItemStackNoDurabilityMixin {
 
     @Inject(
@@ -42,3 +45,4 @@ public class ItemStackNoDurabilityMixin {
         }
     }
 }
+

@@ -9,6 +9,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public class LifeCrystalItem extends Item {
 
     public LifeCrystalItem(Properties properties) {
@@ -46,3 +52,4 @@ public class LifeCrystalItem extends Item {
         return InteractionResultHolder.sidedSuccess(stack, false);
     }
 }
+

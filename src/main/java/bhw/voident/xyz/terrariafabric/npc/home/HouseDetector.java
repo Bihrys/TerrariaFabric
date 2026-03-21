@@ -14,6 +14,12 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.HashSet;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HouseDetector {
 
     private static final int MAX_BLOCKS = 500;
@@ -253,3 +259,4 @@ public final class HouseDetector {
         return BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath();
     }
 }
+

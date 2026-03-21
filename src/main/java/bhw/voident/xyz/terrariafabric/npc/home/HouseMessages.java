@@ -4,6 +4,12 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HouseMessages {
     private HouseMessages() {
     }
@@ -28,3 +34,4 @@ public final class HouseMessages {
         };
     }
 }
+

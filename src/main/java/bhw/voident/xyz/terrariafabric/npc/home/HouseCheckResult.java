@@ -2,6 +2,12 @@ package bhw.voident.xyz.terrariafabric.npc.home;
 
 import java.util.List;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HouseCheckResult {
     private final boolean hasStart;
     private final boolean structuralValid;

@@ -30,6 +30,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public class GuideEntity extends PathfinderMob {
 
     public GuideEntity(EntityType<? extends GuideEntity> type, Level level) {
@@ -103,3 +109,4 @@ public class GuideEntity extends PathfinderMob {
         return false;
     }
 }
+

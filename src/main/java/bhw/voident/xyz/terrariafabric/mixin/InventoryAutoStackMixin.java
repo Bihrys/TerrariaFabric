@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Inventory.class)
+/**
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ */
 public abstract class InventoryAutoStackMixin {
 
     @Shadow
@@ -61,3 +64,4 @@ public abstract class InventoryAutoStackMixin {
         }
     }
 }
+

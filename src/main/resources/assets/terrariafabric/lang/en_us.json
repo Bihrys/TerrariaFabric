@@ -1,5 +1,9 @@
 {
   "item.terrariafabric.life_crystal": "Life Crystal",
+  "item.terrariafabric.copper_coin": "Copper Coin",
+  "item.terrariafabric.silver_coin": "Silver Coin",
+  "item.terrariafabric.gold_coin": "Gold Coin",
+  "item.terrariafabric.platinum_coin": "Platinum Coin",
   "entity.terrariafabric.guide": "Guide",
   "message.terrariafabric.house.only_player": "Only players can use /checkhouse.",
   "message.terrariafabric.house.invalid": "This is not a valid house.",
@@ -13,8 +17,9 @@
   "message.terrariafabric.house.missing.two": "This housing is missing %s and %s.",
   "message.terrariafabric.house.missing.three": "This housing is missing %s, %s, and %s.",
   "message.terrariafabric.house.missing.four": "This housing is missing %s, %s, %s, and %s.",
-  "message.terrariafabric.guide.only_player": "Only players can use /向导.",
+  "message.terrariafabric.guide.only_player": "Only players can use /guide.",
   "message.terrariafabric.guide.bound": "The Guide has moved in.",
   "message.terrariafabric.guide.wait_day": "The Guide will move in during the day.",
-  "message.terrariafabric.guide.spawn_failed": "The Guide could not appear in this house right now."
+  "message.terrariafabric.guide.spawn_failed": "The Guide could not appear in this house right now.",
+  "message.terrariafabric.coin.split.silver_to_copper": "Converted 1 silver coin into 100 copper coins (auto conversion paused for 20 seconds)."
 }

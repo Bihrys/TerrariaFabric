@@ -14,6 +14,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
+/**
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ */
 public abstract class HousingBlockItemMixin {
 
     @Inject(method = "place", at = @At("RETURN"))
@@ -38,3 +41,4 @@ public abstract class HousingBlockItemMixin {
         }
     }
 }
+

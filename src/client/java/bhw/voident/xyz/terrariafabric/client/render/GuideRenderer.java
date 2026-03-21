@@ -7,6 +7,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public class GuideRenderer extends MobRenderer<GuideEntity, VillagerModel<GuideEntity>> {
 
     private static final ResourceLocation TEXTURE =

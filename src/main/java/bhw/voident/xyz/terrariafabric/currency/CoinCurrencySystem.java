@@ -24,6 +24,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class CoinCurrencySystem {
 
     public static final int COPPER_PER_SILVER = 100;
@@ -284,3 +290,4 @@ public final class CoinCurrencySystem {
         }
     }
 }
+

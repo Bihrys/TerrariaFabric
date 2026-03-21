@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class NpcNames {
 
     private static final String RESOURCE_PATH = "data/terrariafabric/npc/names.json";
@@ -94,3 +100,4 @@ public final class NpcNames {
         }
     }
 }
+

@@ -16,6 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(ServerPlayer.class)
+/**
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ */
 public abstract class ServerPlayerSleepMixin {
 
     @Inject(method = "startSleepInBed", at = @At("RETURN"), cancellable = true)
@@ -47,3 +50,4 @@ public abstract class ServerPlayerSleepMixin {
         cir.setReturnValue(Either.right(Unit.INSTANCE));
     }
 }
+

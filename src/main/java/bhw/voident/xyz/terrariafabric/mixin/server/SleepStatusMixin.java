@@ -7,6 +7,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SleepStatus.class)
+/**
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ */
 public class SleepStatusMixin {
 
     @Inject(method = "areEnoughSleeping", at = @At("HEAD"), cancellable = true)

@@ -1,5 +1,6 @@
 package bhw.voident.xyz.terrariafabric.mixin.client;
 
+import bhw.voident.xyz.terrariafabric.item.TerrariaCoinItem;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,6 +18,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreativeModeInventoryScreen.class)
+/**
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ */
 public abstract class CreativeModeInventoryScreenMixin {
 
     @Shadow
@@ -49,7 +53,7 @@ public abstract class CreativeModeInventoryScreenMixin {
         if (max <= 1) {
             return;
         }
-        if (max < 9999) {
+        if (!(source.getItem() instanceof TerrariaCoinItem) && max < 9999) {
             max = 9999;
         }
         currentMenu.setCarried(source.copyWithCount(max));
@@ -79,7 +83,7 @@ public abstract class CreativeModeInventoryScreenMixin {
         if (max <= 1) {
             return;
         }
-        if (max < 9999) {
+        if (!(toAdd.getItem() instanceof TerrariaCoinItem) && max < 9999) {
             max = 9999;
         }
         toAdd.setCount(max);
@@ -99,7 +103,7 @@ public abstract class CreativeModeInventoryScreenMixin {
                     continue;
                 }
                 int existingMax = existing.getMaxStackSize();
-                if (existingMax < 9999 && existingMax > 1) {
+                if (!(existing.getItem() instanceof TerrariaCoinItem) && existingMax < 9999 && existingMax > 1) {
                     existingMax = 9999;
                 }
                 int space = existingMax - existing.getCount();
@@ -164,3 +168,4 @@ public abstract class CreativeModeInventoryScreenMixin {
         return net.minecraft.client.Minecraft.getInstance().gameMode;
     }
 }
+

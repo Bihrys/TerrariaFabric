@@ -14,6 +14,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HousingRegistry extends SavedData {
 
     public static final String DATA_NAME = "terrariafabric_housing";
@@ -266,3 +272,4 @@ public final class HousingRegistry extends SavedData {
         }
     }
 }
+

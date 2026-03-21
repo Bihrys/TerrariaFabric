@@ -2,6 +2,7 @@ package bhw.voident.xyz.terrariafabric;
 
 import bhw.voident.xyz.terrariafabric.command.GuideCommand;
 import bhw.voident.xyz.terrariafabric.command.HouseCommand;
+import bhw.voident.xyz.terrariafabric.currency.CoinCurrencySystem;
 import bhw.voident.xyz.terrariafabric.entity.TerrariafabricEntities;
 import bhw.voident.xyz.terrariafabric.item.TerrariafabricItems;
 import bhw.voident.xyz.terrariafabric.npc.spawn.NpcSpawnScheduler;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * <p>  - {@code TerrariafabricEntities.java}：统一注册实体类型和默认属性。</p>
  * <p>- {@code item/}：自定义物品与物品注册。</p>
  * <p>  - {@code LifeCrystalItem.java}：生命水晶逻辑，增加泰拉式最大心数并回血。</p>
+ * <p>  - {@code TerrariaCoinItem.java}：泰拉货币物品逻辑，支持银币手动拆分为铜币。</p>
  * <p>  - {@code TerrariafabricItems.java}：统一注册物品并放入创造物品栏。</p>
  * <p>- {@code mixin/}：直接改原版行为的补丁层。</p>
  * <p>  - {@code ContainerMaxStackSizeMixin.java}：容器整体堆叠上限改到 9999。</p>
@@ -69,6 +71,7 @@ import org.slf4j.LoggerFactory;
  * <p>  - {@code TerrariafabricHealth.java}：生命值常量，定义 5 心起步、20 心上限、每心 2 点血。</p>
  * <p>  - {@code TerrariafabricMaxHearts.java}：最大心数访问接口，供物品、Mixin、事件系统共用。</p>
  * <p>  - {@code player/sleep/DaySleepFlag.java}：白天睡觉状态标记接口。</p>
+ * <p>- {@code currency/CoinCurrencySystem.java}：泰拉货币系统，负责敌怪掉币、自动换币与手动拆分冷却。</p>
  * <p>- {@code world/time/sleep/SleepTimeAccelerator.java}：泰拉式睡觉加速时间，不直接跳过整晚。</p>
  *
  * <p>当前已创建但暂时还没放实现的包，都是后续扩展位：</p>
@@ -124,6 +127,7 @@ public class Terrariafabric implements ModInitializer {
         GuideCommand.register();
         SleepTimeAccelerator.register();
         NpcSpawnScheduler.register();
+        CoinCurrencySystem.register();
 
         // 玩家对象在重生或复制时同步泰拉最大心数，避免退回原版生命上限。
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
@@ -143,3 +147,4 @@ public class Terrariafabric implements ModInitializer {
         LOGGER.info("TerrariaFabric 房屋检测指令已注册：/checkhouse");
     }
 }
+

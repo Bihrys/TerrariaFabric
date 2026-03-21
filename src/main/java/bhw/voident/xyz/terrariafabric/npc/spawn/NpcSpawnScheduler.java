@@ -12,6 +12,12 @@ import net.minecraft.world.level.Level;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class NpcSpawnScheduler {
 
     private static final long NPC_TICK_INTERVAL = 100L;
@@ -103,3 +109,4 @@ public final class NpcSpawnScheduler {
         }
     }
 }
+

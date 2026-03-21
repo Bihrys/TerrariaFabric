@@ -10,6 +10,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public class TerrariaCoinItem extends Item {
 
     private final CoinTier tier;
@@ -62,4 +68,5 @@ public class TerrariaCoinItem extends Item {
         PLATINUM
     }
 }
+
 

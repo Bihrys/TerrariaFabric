@@ -5,6 +5,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class HousingRelevantBlocks {
 
     private HousingRelevantBlocks() {
@@ -49,3 +55,4 @@ public final class HousingRelevantBlocks {
         return found;
     }
 }
+

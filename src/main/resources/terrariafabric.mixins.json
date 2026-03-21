@@ -6,6 +6,7 @@
   "mixins": [
     "ContainerMaxStackSizeMixin",
     "HousingBlockItemMixin",
+    "InventoryCoinAutoConvertMixin",
     "InventoryAutoStackMixin",
     "ItemStackCountCodecMixin",
     "ItemStackMaxStackSizeMixin",

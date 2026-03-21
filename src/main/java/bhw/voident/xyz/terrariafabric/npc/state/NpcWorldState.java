@@ -12,6 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class NpcWorldState extends SavedData {
 
     private static final String DATA_NAME = "terrariafabric_npc_state";
@@ -123,3 +129,4 @@ public final class NpcWorldState extends SavedData {
         }
     }
 }
+

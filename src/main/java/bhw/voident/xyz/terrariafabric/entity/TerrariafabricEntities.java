@@ -9,6 +9,12 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
+/**
+
+ * 类用途：功能实现类，负责该模块的核心业务逻辑。
+
+ */
+
 public final class TerrariafabricEntities {
 
     public static final EntityType<GuideEntity> GUIDE = Registry.register(
