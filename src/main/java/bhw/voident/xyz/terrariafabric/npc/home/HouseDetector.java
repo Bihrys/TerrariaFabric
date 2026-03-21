@@ -120,6 +120,7 @@ public final class HouseDetector {
         int maxY = start.getY();
         int maxZ = start.getZ();
 
+        // 从可站立起点向外做 BFS，同时收集房间边界和 Terraria 房屋判定需要的要素。
         while (!queue.isEmpty()) {
             BlockPos current = queue.poll();
 
@@ -179,6 +180,7 @@ public final class HouseDetector {
             }
         }
 
+        // 可用空间不只算空气，地毯、火把这类不占满方块的内容也要算进室内空间。
         int totalAvailable = airBlocks + nonFullLightBlocks + carpetBlocks + passThroughOther;
         boolean structuralInvalid = leaked || tooLarge || totalAvailable < MIN_SPACE;
         if (structuralInvalid) {
