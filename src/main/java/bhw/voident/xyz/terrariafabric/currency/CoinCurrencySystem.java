@@ -65,6 +65,7 @@ public final class CoinCurrencySystem {
         }
 
         UUID playerId = player.getUUID();
+        // tick 自动换币和手动触发可能撞在一起，这里做一次轻量重入保护。
         if (!CONVERTING_PLAYERS.add(playerId)) {
             return;
         }
@@ -201,6 +202,7 @@ public final class CoinCurrencySystem {
                 countCoins(inventory, TerrariafabricItems.PLATINUM_COIN)
         );
 
+        // 统一折算后再重建各面额，避免边遍历边换算时出现遗漏或重复统计。
         clearCoinItems(inventory);
         CoinBreakdown breakdown = CoinBreakdown.fromCopper(totalCopperValue);
 
