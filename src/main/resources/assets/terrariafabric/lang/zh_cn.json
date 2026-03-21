@@ -21,5 +21,9 @@
   "message.terrariafabric.guide.bound": "向导已入住这间房屋。",
   "message.terrariafabric.guide.wait_day": "向导会在白天入住这间房屋。",
   "message.terrariafabric.guide.spawn_failed": "向导暂时无法出现在这间房屋里。",
-  "message.terrariafabric.coin.split.silver_to_copper": "已将 1 银币拆分为 100 铜币（自动换币暂时暂停 20 秒）。"
+  "message.terrariafabric.coin.split.silver_to_copper": "已将 1 银币拆分为 100 铜币（自动换币暂时暂停 20 秒）。",
+  "advancements.terrariafabric.root.title": "Terraria Fabric",
+  "advancements.terrariafabric.root.description": "在 Minecraft 里逐步还原 Terraria 式成长。",
+  "advancements.terrariafabric.has_a_home.title": "有家可归",
+  "advancements.terrariafabric.has_a_home.description": "成功地让 NPC 住进你的第一间有效房屋。"
 }

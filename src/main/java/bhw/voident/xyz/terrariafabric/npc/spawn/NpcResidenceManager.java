@@ -1,5 +1,6 @@
 package bhw.voident.xyz.terrariafabric.npc.spawn;
 
+import bhw.voident.xyz.terrariafabric.advancement.TerrariafabricAdvancements;
 import bhw.voident.xyz.terrariafabric.npc.definition.NpcDefinition;
 import bhw.voident.xyz.terrariafabric.npc.definition.NpcDefinitions;
 import bhw.voident.xyz.terrariafabric.npc.home.HouseDetector;
@@ -112,6 +113,11 @@ public final class NpcResidenceManager {
                 if (availableRoom != null) {
                     registry.setOccupant(availableRoom, definition.id(), false);
                     moveIntoRoom(npc, availableRoom);
+                    TerrariafabricAdvancements.awardNearbyHousingPlayers(
+                            level,
+                            availableRoom.center(),
+                            TerrariafabricAdvancements.HAS_A_HOME
+                    );
                 }
                 continue;
             }
@@ -153,6 +159,7 @@ public final class NpcResidenceManager {
         PathfinderMob npc = findTrackedEntity(level, definition, true);
         if (npc != null) {
             moveIntoRoom(npc, room);
+            TerrariafabricAdvancements.awardNearbyHousingPlayers(level, room.center(), TerrariafabricAdvancements.HAS_A_HOME);
             return npc;
         }
 
@@ -172,6 +179,7 @@ public final class NpcResidenceManager {
 
         moveIntoRoom(spawned, room);
         NpcWorldState.get(level).setTrackedEntity(definition.id(), spawned.getUUID());
+        TerrariafabricAdvancements.awardNearbyHousingPlayers(level, room.center(), TerrariafabricAdvancements.HAS_A_HOME);
         return spawned;
     }
 

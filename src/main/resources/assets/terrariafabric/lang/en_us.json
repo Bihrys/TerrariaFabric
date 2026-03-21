@@ -21,5 +21,9 @@
   "message.terrariafabric.guide.bound": "The Guide has moved in.",
   "message.terrariafabric.guide.wait_day": "The Guide will move in during the day.",
   "message.terrariafabric.guide.spawn_failed": "The Guide could not appear in this house right now.",
-  "message.terrariafabric.coin.split.silver_to_copper": "Converted 1 silver coin into 100 copper coins (auto conversion paused for 20 seconds)."
+  "message.terrariafabric.coin.split.silver_to_copper": "Converted 1 silver coin into 100 copper coins (auto conversion paused for 20 seconds).",
+  "advancements.terrariafabric.root.title": "Terraria Fabric",
+  "advancements.terrariafabric.root.description": "Terraria-style progression inside Minecraft.",
+  "advancements.terrariafabric.has_a_home.title": "A Place to Call Home",
+  "advancements.terrariafabric.has_a_home.description": "Successfully move a town NPC into your first valid house."
 }

@@ -281,6 +281,8 @@
 ### 2026.3.21（摸鱼ing）
 
 * 写了一点注释
+* 新增独立成就目录 `src/main/resources/data/terrariafabric/advancements/terraria/`，后续成就都从这里继续扩展
+* 新增首个房屋/NPC 成就 **有家可归**：让第一个城镇 NPC 住进你的第一间有效房屋
 
 
 ---
