@@ -5,18 +5,13 @@ import bhw.voident.xyz.terrariafabric.npc.home.HousingRegistry;
 import bhw.voident.xyz.terrariafabric.npc.home.HousingRelevantBlocks;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
-
-/**
-
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
-
- */
 
 public final class NpcSpawnScheduler {
 
@@ -25,6 +20,8 @@ public final class NpcSpawnScheduler {
     private static final int DIRTY_PROCESS_BUDGET = 6;
     private static final int FALLBACK_SCAN_RADIUS = 10;
     private static final int FALLBACK_SCAN_LIMIT = 32;
+    private static final boolean DEBUG_SHOW_AUTO_HOUSING_COUNTDOWN = true; // 调试用：自动房屋检测倒计时总开关。
+    private static final long DEBUG_AUTO_HOUSING_COUNTDOWN_SECONDS = 5L; // 调试用：改这里能快速验证屏幕底部倒计时。
 
     private static final Map<ServerLevel, WorldRuntime> RUNTIMES = new IdentityHashMap<>();
 
@@ -78,6 +75,7 @@ public final class NpcSpawnScheduler {
 
         HousingRegistry registry = HousingRegistry.get(level);
         runtime.dirtyQueue.process(level, registry, DIRTY_PROCESS_BUDGET);
+        showAutoHousingCountdown(level);
 
         if (level.getGameTime() % FALLBACK_SCAN_INTERVAL == 0) {
             for (ServerPlayer player : level.players()) {
@@ -89,10 +87,59 @@ public final class NpcSpawnScheduler {
                         runtime.dirtyQueue
                 );
             }
+            runtime.pendingAutoScanResult = true;
+            if (runtime.dirtyQueue.isEmpty()) {
+                showAutoHousingScanResult(level);
+                runtime.pendingAutoScanResult = false;
+            }
+        }
+
+        if (runtime.pendingAutoScanResult && runtime.dirtyQueue.isEmpty()) {
+            showAutoHousingScanResult(level);
+            runtime.pendingAutoScanResult = false;
         }
 
         if (level.getGameTime() % NPC_TICK_INTERVAL == 0) {
             NpcResidenceManager.tick(level);
+        }
+    }
+
+    private static void showAutoHousingCountdown(ServerLevel level) {
+        if (!DEBUG_SHOW_AUTO_HOUSING_COUNTDOWN || level.getGameTime() % 20L != 0L) {
+            return;
+        }
+
+        long ticksUntilScan = FALLBACK_SCAN_INTERVAL - (level.getGameTime() % FALLBACK_SCAN_INTERVAL);
+        if (ticksUntilScan == FALLBACK_SCAN_INTERVAL) {
+            return;
+        }
+
+        long secondsUntilScan = ticksUntilScan / 20L;
+        if (secondsUntilScan <= 0L || secondsUntilScan > DEBUG_AUTO_HOUSING_COUNTDOWN_SECONDS) {
+            return;
+        }
+
+        for (ServerPlayer player : level.players()) {
+            if (player.isSpectator()) {
+                continue;
+            }
+            player.displayClientMessage(
+                    Component.translatable("message.terrariafabric.house.auto_scan_countdown", secondsUntilScan),
+                    true
+            );
+        }
+    }
+
+    private static void showAutoHousingScanResult(ServerLevel level) {
+        int availableRooms = HousingRegistry.get(level).countAvailableRooms();
+        for (ServerPlayer player : level.players()) {
+            if (player.isSpectator()) {
+                continue;
+            }
+            player.displayClientMessage(
+                    Component.translatable("message.terrariafabric.house.auto_scan_result", availableRooms),
+                    true
+            );
         }
     }
 
@@ -103,10 +150,10 @@ public final class NpcSpawnScheduler {
     private static final class WorldRuntime {
         private final HousingDirtyQueue dirtyQueue = new HousingDirtyQueue();
         private boolean wasDay;
+        private boolean pendingAutoScanResult;
 
         private WorldRuntime(boolean wasDay) {
             this.wasDay = wasDay;
         }
     }
 }
-

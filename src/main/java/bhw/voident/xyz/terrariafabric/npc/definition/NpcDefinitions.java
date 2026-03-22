@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 public final class NpcDefinitions {
 
     public static final NpcDefinition GUIDE = new GuideNpcDefinition();
+    public static final NpcDefinition MERCHANT = new MerchantNpcDefinition();
 
-    private static final List<NpcDefinition> ALL = List.of(GUIDE);
+    private static final List<NpcDefinition> ALL = List.of(GUIDE, MERCHANT);
     private static final Map<String, NpcDefinition> BY_ID = ALL.stream()
             .collect(Collectors.toUnmodifiableMap(NpcDefinition::id, Function.identity()));
 

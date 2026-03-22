@@ -7,6 +7,7 @@ import bhw.voident.xyz.terrariafabric.npc.home.HouseDetector;
 import bhw.voident.xyz.terrariafabric.npc.home.HousingRegistry;
 import bhw.voident.xyz.terrariafabric.npc.state.NpcWorldState;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -17,12 +18,6 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.UUID;
-
-/**
-
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
-
- */
 
 public final class NpcResidenceManager {
 
@@ -101,7 +96,6 @@ public final class NpcResidenceManager {
             PathfinderMob npc = findTrackedEntity(level, definition, true);
             HousingRegistry.RoomRecord assignedRoom = registry.findAssignedRoom(definition.id());
 
-            // 先处理已经存在的 NPC，优先维持它和房间绑定关系，再考虑补空房。
             if (npc != null) {
                 worldState.setTrackedEntity(definition.id(), npc.getUUID());
                 if (assignedRoom != null) {
@@ -113,21 +107,30 @@ public final class NpcResidenceManager {
                 if (availableRoom != null) {
                     registry.setOccupant(availableRoom, definition.id(), false);
                     moveIntoRoom(npc, availableRoom);
-                    TerrariafabricAdvancements.awardNearbyHousingPlayers(
-                            level,
-                            availableRoom.center(),
-                            TerrariafabricAdvancements.HAS_A_HOME
-                    );
+                    handleNpcMovedIn(level, definition, npc);
                 }
                 continue;
             }
 
             NpcWorldState.NpcRecord record = worldState.getOrCreate(definition.id());
-            // 不在待重生状态时直接跳过，避免每 tick 都尝试找房间和刷实体。
+            if (!record.spawnedOnce() && definition.canSpawnNaturally(level)) {
+                HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
+                if (availableRoom != null) {
+                    registry.setOccupant(availableRoom, definition.id(), false);
+                    if (ensurePresentInRoom(level, definition, availableRoom, true) == null) {
+                        registry.setOccupant(availableRoom, null, false);
+                    }
+                }
+                continue;
+            }
+
             if (!record.pendingRespawn()) {
                 continue;
             }
             if (definition.needsHousingForRespawn() && !level.isDay()) {
+                continue;
+            }
+            if (!definition.canRespawn(level)) {
                 continue;
             }
 
@@ -159,7 +162,7 @@ public final class NpcResidenceManager {
         PathfinderMob npc = findTrackedEntity(level, definition, true);
         if (npc != null) {
             moveIntoRoom(npc, room);
-            TerrariafabricAdvancements.awardNearbyHousingPlayers(level, room.center(), TerrariafabricAdvancements.HAS_A_HOME);
+            handleNpcMovedIn(level, definition, npc);
             return npc;
         }
 
@@ -179,7 +182,7 @@ public final class NpcResidenceManager {
 
         moveIntoRoom(spawned, room);
         NpcWorldState.get(level).setTrackedEntity(definition.id(), spawned.getUUID());
-        TerrariafabricAdvancements.awardNearbyHousingPlayers(level, room.center(), TerrariafabricAdvancements.HAS_A_HOME);
+        handleNpcMovedIn(level, definition, spawned);
         return spawned;
     }
 
@@ -188,7 +191,7 @@ public final class NpcResidenceManager {
         if (npc == null) {
             return null;
         }
-        npc.setCustomName(net.minecraft.network.chat.Component.literal(definition.pickName(level.getRandom())));
+        ensureDisplayName(level, definition, npc);
         definition.onSpawn(npc, level);
         return npc;
     }
@@ -226,11 +229,12 @@ public final class NpcResidenceManager {
 
     private static PathfinderMob findTrackedEntity(ServerLevel level, NpcDefinition definition, boolean allowScan) {
         NpcWorldState.NpcRecord record = NpcWorldState.get(level).getOrCreate(definition.id());
-        // 先走持久化 UUID；只有记录失效时才退回全图扫描，降低常驻开销。
         if (record.entityUuid() != null) {
             Entity entity = level.getEntity(record.entityUuid());
             if (definition.entityClass().isInstance(entity)) {
-                return definition.entityClass().cast(entity);
+                PathfinderMob npc = definition.entityClass().cast(entity);
+                ensureDisplayName(level, definition, npc);
+                return npc;
             }
         }
         if (!allowScan) {
@@ -245,8 +249,33 @@ public final class NpcResidenceManager {
             return null;
         }
         PathfinderMob found = entities.get(0);
+        ensureDisplayName(level, definition, found);
         NpcWorldState.get(level).setTrackedEntity(definition.id(), found.getUUID());
         return found;
     }
-}
 
+    private static void handleNpcMovedIn(ServerLevel level, NpcDefinition definition, PathfinderMob npc) {
+        ensureDisplayName(level, definition, npc);
+        TerrariafabricAdvancements.awardHasAHome(level);
+        for (ServerPlayer player : level.players()) {
+            if (player.isSpectator()) {
+                continue;
+            }
+            player.sendSystemMessage(Component.translatable("message.terrariafabric.npc.moved_in", npc.getDisplayName()));
+        }
+    }
+
+    private static void ensureDisplayName(ServerLevel level, NpcDefinition definition, PathfinderMob npc) {
+        String suffix = "(" + definition.professionSuffix() + ")";
+        Component customName = npc.getCustomName();
+        if (customName != null) {
+            String currentName = customName.getString();
+            if (!currentName.endsWith(suffix)) {
+                npc.setCustomName(Component.literal(currentName + suffix));
+            }
+        } else {
+            npc.setCustomName(Component.literal(definition.formatDisplayName(level.getRandom())));
+        }
+        npc.setCustomNameVisible(true);
+    }
+}
