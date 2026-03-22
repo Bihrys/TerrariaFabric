@@ -56,6 +56,19 @@ public final class CoinCurrencySystem {
         AUTO_CONVERT_PAUSE_UNTIL.put(player.getUUID(), player.serverLevel().getGameTime() + MANUAL_SPLIT_PAUSE_TICKS);
     }
 
+    public static long getInventoryCopperValue(ServerPlayer player) {
+        if (player == null) {
+            return 0L;
+        }
+        Inventory inventory = player.getInventory();
+        return toCopperValue(
+                countCoins(inventory, TerrariafabricItems.COPPER_COIN),
+                countCoins(inventory, TerrariafabricItems.SILVER_COIN),
+                countCoins(inventory, TerrariafabricItems.GOLD_COIN),
+                countCoins(inventory, TerrariafabricItems.PLATINUM_COIN)
+        );
+    }
+
     public static void tryAutoConvertNow(ServerPlayer player) {
         if (player == null) {
             return;
