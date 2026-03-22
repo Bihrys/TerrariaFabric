@@ -10,12 +10,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.levelgen.Heightmap;
 
-/**
-
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
-
- */
-
 public final class GuideNpcDefinition implements NpcDefinition {
 
     private static final int WORLD_SPAWN_RADIUS = 8;
@@ -48,6 +42,11 @@ public final class GuideNpcDefinition implements NpcDefinition {
     }
 
     @Override
+    public String professionSuffix() {
+        return "向导";
+    }
+
+    @Override
     public boolean spawnsWithWorld() {
         return true;
     }
@@ -74,4 +73,3 @@ public final class GuideNpcDefinition implements NpcDefinition {
         return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, base).above();
     }
 }
-
