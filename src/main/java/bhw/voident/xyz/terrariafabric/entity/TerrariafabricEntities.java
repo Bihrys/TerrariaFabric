@@ -9,11 +9,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-/**
 
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
-
- */
 
 public final class TerrariafabricEntities {
 
@@ -26,11 +22,21 @@ public final class TerrariafabricEntities {
                     .trackedUpdateRate(3)
                     .build()
     );
+    public static final EntityType<MerchantEntity> MERCHANT = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath("terrariafabric", "merchant"),
+            FabricEntityTypeBuilder.create(MobCategory.CREATURE, MerchantEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.6F, 1.95F))
+                    .trackRangeBlocks(8)
+                    .trackedUpdateRate(3)
+                    .build()
+    );
 
     private TerrariafabricEntities() {
     }
 
     public static void register() {
         FabricDefaultAttributeRegistry.register(GUIDE, GuideEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(MERCHANT, MerchantEntity.createAttributes());
     }
 }
