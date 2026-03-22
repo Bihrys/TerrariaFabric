@@ -78,6 +78,16 @@ public final class HousingRegistry extends SavedData {
         return null;
     }
 
+    public int countAvailableRooms() {
+        int count = 0;
+        for (RoomRecord room : rooms) {
+            if (!room.isOccupied() && !room.dirty) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void setOccupant(RoomRecord room, String occupantId, boolean manual) {
         if (room == null) {
             return;

@@ -35,7 +35,23 @@ public interface NpcDefinition {
         return NpcNames.pick(id(), random, fallbackNames());
     }
 
+    default String professionSuffix() {
+        return id();
+    }
+
+    default String formatDisplayName(RandomSource random) {
+        return pickName(random) + "(" + professionSuffix() + ")";
+    }
+
     default boolean canUseRoom(ServerLevel level, HousingRegistry.RoomRecord room) {
+        return true;
+    }
+
+    default boolean canSpawnNaturally(ServerLevel level) {
+        return false;
+    }
+
+    default boolean canRespawn(ServerLevel level) {
         return true;
     }
 
