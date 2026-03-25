@@ -8,6 +8,7 @@ import bhw.voident.xyz.terrariafabric.item.TerrariafabricItems;
 import bhw.voident.xyz.terrariafabric.npc.spawn.NpcSpawnScheduler;
 import bhw.voident.xyz.terrariafabric.player.TerrariafabricHealth;
 import bhw.voident.xyz.terrariafabric.player.TerrariafabricMaxHearts;
+import bhw.voident.xyz.terrariafabric.sit.TerrariafabricSit;
 import bhw.voident.xyz.terrariafabric.world.time.sleep.SleepTimeAccelerator;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
@@ -28,7 +29,7 @@ public class Terrariafabric implements ModInitializer {
         GuideCommand.register(); // 注册 /向导。
         SleepTimeAccelerator.register(); // 注册睡觉时间加速。
         NpcSpawnScheduler.register(); // 注册房屋和 NPC 调度。
-        CoinCurrencySystem.register(); // 注册货币掉落和自动换币。
+        CoinCurrencySystem.register();        TerrariafabricSit.register(); // 注册货币掉落和自动换币。
 
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> { // 重生或复制玩家时同步最大心数。
             if (!(oldPlayer instanceof TerrariafabricMaxHearts oldHearts)) {
