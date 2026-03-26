@@ -32,7 +32,7 @@ import net.minecraft.world.level.Level;
 
 /**
 
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：向导 NPC 实体行为与属性。
 
  */
 

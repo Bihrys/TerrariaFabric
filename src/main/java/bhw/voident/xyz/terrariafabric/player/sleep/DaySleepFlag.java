@@ -2,7 +2,7 @@ package bhw.voident.xyz.terrariafabric.player.sleep;
 
 /**
 
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：标记玩家是否处于白天睡觉状态。
 
  */
 
