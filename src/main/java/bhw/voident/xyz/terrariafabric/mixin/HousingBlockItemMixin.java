@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
 /**
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：放置房屋相关方块后标记房屋脏区。
  */
 public abstract class HousingBlockItemMixin {
 

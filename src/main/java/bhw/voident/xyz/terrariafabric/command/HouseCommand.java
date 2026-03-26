@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 /**
 
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：/checkhouse 命令入口，手动检测房屋并返回结果。
 
  */
 
