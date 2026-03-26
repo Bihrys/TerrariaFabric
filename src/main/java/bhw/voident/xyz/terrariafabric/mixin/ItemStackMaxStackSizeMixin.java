@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
 /**
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：统一提高可堆叠物品最大数量。
  */
 public class ItemStackMaxStackSizeMixin {
 

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Mixin(ServerPlayer.class)
 /**
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：服务端玩家白天睡觉补丁与状态同步。
  */
 public abstract class ServerPlayerSleepMixin {
 

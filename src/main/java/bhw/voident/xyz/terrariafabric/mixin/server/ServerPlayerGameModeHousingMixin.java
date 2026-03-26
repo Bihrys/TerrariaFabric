@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerGameMode.class)
 /**
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：破坏房屋相关方块时标记房屋脏区。
  */
 public abstract class ServerPlayerGameModeHousingMixin {
 

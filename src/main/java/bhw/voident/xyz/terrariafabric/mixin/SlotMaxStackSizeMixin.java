@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Slot.class)
 /**
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：槽位层最大堆叠上限提升到 9999。
  */
 public abstract class SlotMaxStackSizeMixin {
 

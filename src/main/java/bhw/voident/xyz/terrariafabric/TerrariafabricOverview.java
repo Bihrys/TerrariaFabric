@@ -94,6 +94,13 @@ package bhw.voident.xyz.terrariafabric;
  * <p>- 房间占用与房屋持久化只放在 {@code HousingRegistry}。</p>
  * <p>- NPC 是否已生成、是否待重生只放在 {@code NpcWorldState}。</p>
  * <p>- 原版行为修改走 Mixin；纯业务逻辑优先写在普通类里，避免补丁类越来越重。</p>
+ * <p>近期新增补充：</p>
+ * <p>- {@code advancement/TerrariafabricAdvancements.java}：成就发放入口（如有家可归）。</p>
+ * <p>- {@code data/terrariafabric/advancements/}：成就数据资源。</p>
+ * <p>- {@code entity/MerchantEntity.java}：商人 NPC 实体与基础行为。</p>
+ * <p>- {@code npc/definition/MerchantNpcDefinition.java}：商人出现条件与名字池。</p>
+ * <p>- {@code sit/}：坐下系统入口与逻辑（楼梯/半砖）。</p>
+ * <p>- {@code client/render/MerchantRenderer.java}：商人渲染器。</p>
  */
 public final class TerrariafabricOverview {
 

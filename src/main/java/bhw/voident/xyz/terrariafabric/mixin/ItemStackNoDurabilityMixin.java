@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 /**
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：禁止工具/武器耐久消耗。
  */
 public class ItemStackNoDurabilityMixin {
 

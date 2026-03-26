@@ -11,7 +11,7 @@ import net.minecraft.world.entity.PathfinderMob;
 
 /**
 
- * 类用途：功能实现类，负责该模块的核心业务逻辑。
+ * 类用途：NPC 定义接口（名字、生成、入住规则）。
 
  */
 
