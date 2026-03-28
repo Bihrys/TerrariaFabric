@@ -18,15 +18,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
-/** 类用途：处理坐下、叠坐、潜行下车和坐姿朝向。 */
+/** 类用途：处理半砖和台阶坐下，以及坐姿朝向。 */
 public final class SitLogic {
     private static final double SEAT_SEARCH_RADIUS = 0.35D;
-    private static final Set<UUID> ACTIVE_SNEAKS = new HashSet<>();
 
     private SitLogic() {
     }
@@ -41,15 +37,6 @@ public final class SitLogic {
         }
 
         return false;
-    }
-
-    public static boolean canStack(Player rider, InteractionHand hand, Player target) {
-        return rider.isShiftKeyDown()
-                && hand == InteractionHand.MAIN_HAND
-                && rider.getItemInHand(hand).isEmpty()
-                && rider != target
-                && target.isAlive()
-                && rider.getVehicle() == null;
     }
 
     public static boolean trySitOnBlock(ServerPlayer player, ServerLevel level, BlockPos pos, BlockState state, BlockHitResult hitResult) {
@@ -105,39 +92,7 @@ public final class SitLogic {
         return !isSeatOccupied(level, pos);
     }
 
-    public static boolean tryStackOnPlayer(ServerPlayer rider, Player target) {
-        if (!target.isAlive()) {
-            return false;
-        }
-
-        if (target.hasPassenger(rider) || rider.hasPassenger(target) || rider.getRootVehicle() == target.getRootVehicle()) {
-            return false;
-        }
-
-        return rider.startRiding(target, true);
-    }
-
-    public static void handleSneak(ServerPlayer player) {
-        UUID playerId = player.getUUID();
-
-        if (!player.isShiftKeyDown()) {
-            ACTIVE_SNEAKS.remove(playerId);
-            return;
-        }
-
-        if (!ACTIVE_SNEAKS.add(playerId)) {
-            return;
-        }
-
-        Entity passenger = player.getFirstPassenger();
-        if (passenger instanceof Player rider) {
-            rider.stopRiding();
-            rider.setShiftKeyDown(false);
-        }
-    }
-
     public static void tickServerPlayer(ServerPlayer player) {
-        handleSneak(player);
         updateRiderPose(player);
     }
 
@@ -152,14 +107,6 @@ public final class SitLogic {
                 seat.discard();
             }
         }
-    }
-
-    public static boolean shouldShiftBeHandledByMod(Player player) {
-        return !player.getPassengers().isEmpty();
-    }
-
-    public static boolean isModRide(Entity vehicle) {
-        return isSeatEntity(vehicle) || vehicle instanceof Player;
     }
 
     public static boolean isSeatEntity(Entity entity) {
@@ -178,16 +125,7 @@ public final class SitLogic {
 
     public static void updateRiderPose(Player rider) {
         Entity vehicle = rider.getVehicle();
-        if (vehicle == null) {
-            return;
-        }
-
-        if (vehicle instanceof Player) {
-            alignBodyToHead(rider);
-            return;
-        }
-
-        if (!isSeatEntity(vehicle)) {
+        if (vehicle == null || !isSeatEntity(vehicle)) {
             return;
         }
 

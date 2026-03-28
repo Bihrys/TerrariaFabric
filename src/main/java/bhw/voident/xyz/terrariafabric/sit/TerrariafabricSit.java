@@ -3,7 +3,6 @@ package bhw.voident.xyz.terrariafabric.sit;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -13,7 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,9 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 
-/** 类用途：坐下系统主入口，注册座位实体和交互事件。 */
+/** 类用途：坐下系统主入口，注册座位实体和方块坐下事件。 */
 public final class TerrariafabricSit {
 
     public static final String MOD_ID = "terrariafabric";
@@ -44,7 +41,6 @@ public final class TerrariafabricSit {
     public static void register() {
         SitConfig.get();
         UseBlockCallback.EVENT.register(TerrariafabricSit::handleBlockUse);
-        UseEntityCallback.EVENT.register(TerrariafabricSit::handleEntityUse);
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
             if (world.isClientSide()) {
                 return;
@@ -94,25 +90,5 @@ public final class TerrariafabricSit {
         return SitLogic.trySitOnBlock(serverPlayer, serverLevel, pos, state, hitResult)
                 ? InteractionResult.SUCCESS
                 : InteractionResult.PASS;
-    }
-
-    private static InteractionResult handleEntityUse(Player player, Level level, InteractionHand hand, Entity entity, EntityHitResult hitResult) {
-        if (hand != InteractionHand.MAIN_HAND || player.isSpectator()) {
-            return InteractionResult.PASS;
-        }
-
-        if (!(entity instanceof Player targetPlayer) || !SitLogic.canStack(player, hand, targetPlayer)) {
-            return InteractionResult.PASS;
-        }
-
-        if (level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        }
-
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return InteractionResult.PASS;
-        }
-
-        return SitLogic.tryStackOnPlayer(serverPlayer, targetPlayer) ? InteractionResult.SUCCESS : InteractionResult.PASS;
     }
 }

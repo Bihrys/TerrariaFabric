@@ -15,7 +15,7 @@ package bhw.voident.xyz.terrariafabric;
  * <p>- {@code npc/spawn/}：NPC 入住、重生和自动房屋检测调度。</p>
  * <p>- {@code npc/state/}：NPC 世界级持久化状态。</p>
  * <p>- {@code player/}：最大心数和白天睡觉状态。</p>
- * <p>- {@code sit/}：坐下系统。{@code TerrariafabricSit} 负责注册事件，{@code SitLogic} 负责坐下/叠坐/朝向，{@code SitSeatEntity} 是不可见座位实体，{@code SitUtil} 保存座位映射，{@code SitConfig} 读取配置。</p>
+ * <p>- {@code sit/}：坐下系统。{@code TerrariafabricSit} 负责注册事件，{@code SitLogic} 负责半砖和台阶坐下判定、座位复用与朝向，{@code SitSeatEntity} 是不可见座位实体，{@code SitUtil} 保存座位映射，{@code SitConfig} 读取配置。</p>
  * <p>- {@code advancement/}：自定义成就发放入口。</p>
  * <p>- {@code world/time/sleep/}：泰拉式睡觉加速，而不是直接跳过整晚。</p>
  *
@@ -30,13 +30,12 @@ package bhw.voident.xyz.terrariafabric;
  * <p>- 通用行为改动放在 {@code mixin/}。</p>
  * <p>- 服务端玩家与睡觉相关补丁放在 {@code mixin/server/}。</p>
  * <p>- 客户端界面补丁放在 {@code mixin/client/}。</p>
- * <p>- 坐下系统额外补了 {@code mixin/sit/PlayerEntityMixin.java}，用来接管叠坐时的潜行下车行为。</p>
  *
  * <p>近期补充过的内容：</p>
  * <p>- 商人 NPC、名字池、入住条件和客户端渲染。</p>
  * <p>- 房屋入住提示、自动检测倒计时和检测完成提示。</p>
  * <p>- {@code data/terrariafabric/advancements/} 下的成就资源与“有家可归”发放链路。</p>
- * <p>- 按原 SIT 源码补齐的客户端姿态更新和叠坐下车拦截。</p>
+ * <p>- 按原 SIT 源码补齐的客户端姿态更新与空座位渲染。</p>
  */
 public final class TerrariafabricOverview {
 

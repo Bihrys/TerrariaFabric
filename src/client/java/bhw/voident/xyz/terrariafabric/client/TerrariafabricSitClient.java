@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.world.entity.player.Player;
 
-/** 类用途：坐下系统的客户端逻辑，负责空渲染器和骑乘姿态更新。 */
+/** 类用途：坐下系统的客户端逻辑，负责座位空渲染器和坐姿朝向更新。 */
 public final class TerrariafabricSitClient {
 
     private TerrariafabricSitClient() {
