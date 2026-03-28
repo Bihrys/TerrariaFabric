@@ -9,8 +9,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-
-
+/** 类用途：注册当前已接入的 Terraria 风格 NPC 实体类型。 */
 public final class TerrariafabricEntities {
 
     public static final EntityType<GuideEntity> GUIDE = Registry.register(
@@ -31,6 +30,15 @@ public final class TerrariafabricEntities {
                     .trackedUpdateRate(3)
                     .build()
     );
+    public static final EntityType<NurseEntity> NURSE = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath("terrariafabric", "nurse"),
+            FabricEntityTypeBuilder.create(MobCategory.CREATURE, NurseEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.6F, 1.95F))
+                    .trackRangeBlocks(8)
+                    .trackedUpdateRate(3)
+                    .build()
+    );
 
     private TerrariafabricEntities() {
     }
@@ -38,5 +46,6 @@ public final class TerrariafabricEntities {
     public static void register() {
         FabricDefaultAttributeRegistry.register(GUIDE, GuideEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(MERCHANT, MerchantEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(NURSE, NurseEntity.createAttributes());
     }
 }

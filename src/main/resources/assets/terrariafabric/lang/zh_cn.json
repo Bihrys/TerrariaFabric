@@ -6,6 +6,7 @@
   "item.terrariafabric.platinum_coin": "铂金币",
   "entity.terrariafabric.guide": "向导",
   "entity.terrariafabric.merchant": "商人",
+  "entity.terrariafabric.nurse": "护士",
   "message.terrariafabric.house.only_player": "只有玩家可以使用 /checkhouse。",
   "message.terrariafabric.house.invalid": "这不是有效的房屋。",
   "message.terrariafabric.house.suitable": "这间房屋适合入住。",

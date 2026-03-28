@@ -6,6 +6,7 @@
   "item.terrariafabric.platinum_coin": "Platinum Coin",
   "entity.terrariafabric.guide": "Guide",
   "entity.terrariafabric.merchant": "Merchant",
+  "entity.terrariafabric.nurse": "Nurse",
   "message.terrariafabric.house.only_player": "Only players can use /checkhouse.",
   "message.terrariafabric.house.invalid": "This is not a valid house.",
   "message.terrariafabric.house.suitable": "This housing is suitable.",

@@ -13,16 +13,16 @@ import net.minecraft.world.level.Level;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+/** 类用途：调度房屋自动复检和 Town NPC 入住/重生。 */
 public final class NpcSpawnScheduler {
 
     private static final long NPC_TICK_INTERVAL = 100L;
     private static final long FALLBACK_SCAN_INTERVAL = 1200L;
     private static final int DIRTY_PROCESS_BUDGET = 6;
     private static final int FALLBACK_SCAN_RADIUS = 10;
-    private static final int FALLBACK_SCAN_LIMIT = 32;
+    private static final int FALLBACK_SCAN_LIMIT = 48;
     private static final boolean DEBUG_SHOW_AUTO_HOUSING_COUNTDOWN = true; // 调试用：自动房屋检测倒计时总开关。
     private static final long DEBUG_AUTO_HOUSING_COUNTDOWN_SECONDS = 5L; // 调试用：改这里能快速验证屏幕底部倒计时。
-
     private static final Map<ServerLevel, WorldRuntime> RUNTIMES = new IdentityHashMap<>();
 
     private NpcSpawnScheduler() {
@@ -49,7 +49,7 @@ public final class NpcSpawnScheduler {
 
         WorldRuntime runtime = runtime(level);
         runtime.wasDay = level.isDay();
-        HousingRelevantBlocks.enqueueNearbyAnchors(
+        HousingRelevantBlocks.enqueueNearbyRoomStarts(
                 level,
                 player.blockPosition(),
                 FALLBACK_SCAN_RADIUS,
@@ -79,7 +79,7 @@ public final class NpcSpawnScheduler {
 
         if (level.getGameTime() % FALLBACK_SCAN_INTERVAL == 0) {
             for (ServerPlayer player : level.players()) {
-                HousingRelevantBlocks.enqueueNearbyAnchors(
+                HousingRelevantBlocks.enqueueNearbyRoomStarts(
                         level,
                         player.blockPosition(),
                         FALLBACK_SCAN_RADIUS,

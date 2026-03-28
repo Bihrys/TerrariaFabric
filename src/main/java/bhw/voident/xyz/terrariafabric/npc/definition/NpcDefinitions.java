@@ -5,18 +5,14 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
-
- * 类用途：NPC 定义索引表。
-
- */
-
+/** 类用途：集中维护已接入的城镇 NPC 定义顺序。 */
 public final class NpcDefinitions {
 
     public static final NpcDefinition GUIDE = new GuideNpcDefinition();
     public static final NpcDefinition MERCHANT = new MerchantNpcDefinition();
+    public static final NpcDefinition NURSE = new NurseNpcDefinition();
 
-    private static final List<NpcDefinition> ALL = List.of(GUIDE, MERCHANT);
+    private static final List<NpcDefinition> ALL = List.of(GUIDE, MERCHANT, NURSE);
     private static final Map<String, NpcDefinition> BY_ID = ALL.stream()
             .collect(Collectors.toUnmodifiableMap(NpcDefinition::id, Function.identity()));
 
@@ -34,4 +30,3 @@ public final class NpcDefinitions {
         return BY_ID.get(id);
     }
 }
-

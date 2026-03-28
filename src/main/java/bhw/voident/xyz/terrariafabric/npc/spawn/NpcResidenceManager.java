@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.UUID;
 
+/** 类用途：管理 Town NPC 的住房分配、重生和自动入住优先级。 */
 public final class NpcResidenceManager {
 
     private static final double SNAP_DISTANCE_SQR = 24.0 * 24.0;
@@ -91,6 +92,7 @@ public final class NpcResidenceManager {
     public static void tick(ServerLevel level) {
         HousingRegistry registry = HousingRegistry.get(level);
         NpcWorldState worldState = NpcWorldState.get(level);
+        PendingHousingAction pendingAction = null;
 
         for (NpcDefinition definition : NpcDefinitions.all()) {
             PathfinderMob npc = findTrackedEntity(level, definition, true);
@@ -105,43 +107,46 @@ public final class NpcResidenceManager {
 
                 HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
                 if (availableRoom != null) {
-                    registry.setOccupant(availableRoom, definition.id(), false);
-                    moveIntoRoom(npc, availableRoom);
-                    handleNpcMovedIn(level, definition, npc);
+                    pendingAction = PendingHousingAction.pickBetter(
+                            pendingAction,
+                            PendingHousingAction.moveIn(definition, availableRoom, npc)
+                    );
                 }
                 continue;
             }
 
             NpcWorldState.NpcRecord record = worldState.getOrCreate(definition.id());
-            if (!record.spawnedOnce() && definition.canSpawnNaturally(level)) {
+            if (record.pendingRespawn()) {
+                if (definition.needsHousingForRespawn() && !level.isDay()) {
+                    continue;
+                }
+                if (!definition.canRespawn(level)) {
+                    continue;
+                }
+
                 HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
                 if (availableRoom != null) {
-                    registry.setOccupant(availableRoom, definition.id(), false);
-                    if (ensurePresentInRoom(level, definition, availableRoom, true) == null) {
-                        registry.setOccupant(availableRoom, null, false);
-                    }
+                    pendingAction = PendingHousingAction.pickBetter(
+                            pendingAction,
+                            PendingHousingAction.respawn(definition, availableRoom)
+                    );
                 }
                 continue;
             }
 
-            if (!record.pendingRespawn()) {
-                continue;
+            if (!record.spawnedOnce() && definition.canSpawnNaturally(level)) {
+                HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
+                if (availableRoom != null) {
+                    pendingAction = PendingHousingAction.pickBetter(
+                            pendingAction,
+                            PendingHousingAction.newArrival(definition, availableRoom)
+                    );
+                }
             }
-            if (definition.needsHousingForRespawn() && !level.isDay()) {
-                continue;
-            }
-            if (!definition.canRespawn(level)) {
-                continue;
-            }
+        }
 
-            HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
-            if (availableRoom == null) {
-                continue;
-            }
-            registry.setOccupant(availableRoom, definition.id(), false);
-            if (ensurePresentInRoom(level, definition, availableRoom, true) == null) {
-                registry.setOccupant(availableRoom, null, false);
-            }
+        if (pendingAction != null) {
+            applyPendingAction(level, registry, pendingAction);
         }
     }
 
@@ -184,6 +189,20 @@ public final class NpcResidenceManager {
         NpcWorldState.get(level).setTrackedEntity(definition.id(), spawned.getUUID());
         handleNpcMovedIn(level, definition, spawned);
         return spawned;
+    }
+
+    private static void applyPendingAction(ServerLevel level, HousingRegistry registry, PendingHousingAction action) {
+        if (action.kind == PendingHousingAction.Kind.MOVE_IN_EXISTING && action.existingNpc != null) {
+            registry.setOccupant(action.room, action.definition.id(), false);
+            moveIntoRoom(action.existingNpc, action.room);
+            handleNpcMovedIn(level, action.definition, action.existingNpc);
+            return;
+        }
+
+        registry.setOccupant(action.room, action.definition.id(), false);
+        if (ensurePresentInRoom(level, action.definition, action.room, true) == null) {
+            registry.setOccupant(action.room, null, false);
+        }
     }
 
     private static PathfinderMob spawn(ServerLevel level, NpcDefinition definition, BlockPos spawnPos) {
@@ -277,5 +296,53 @@ public final class NpcResidenceManager {
             npc.setCustomName(Component.literal(definition.formatDisplayName(level.getRandom())));
         }
         npc.setCustomNameVisible(true);
+    }
+
+    private static final class PendingHousingAction {
+        private final Kind kind;
+        private final NpcDefinition definition;
+        private final HousingRegistry.RoomRecord room;
+        private final PathfinderMob existingNpc;
+
+        private PendingHousingAction(Kind kind, NpcDefinition definition, HousingRegistry.RoomRecord room, PathfinderMob existingNpc) {
+            this.kind = kind;
+            this.definition = definition;
+            this.room = room;
+            this.existingNpc = existingNpc;
+        }
+
+        private static PendingHousingAction moveIn(NpcDefinition definition, HousingRegistry.RoomRecord room, PathfinderMob existingNpc) {
+            return new PendingHousingAction(Kind.MOVE_IN_EXISTING, definition, room, existingNpc);
+        }
+
+        private static PendingHousingAction respawn(NpcDefinition definition, HousingRegistry.RoomRecord room) {
+            return new PendingHousingAction(Kind.RESPAWN, definition, room, null);
+        }
+
+        private static PendingHousingAction newArrival(NpcDefinition definition, HousingRegistry.RoomRecord room) {
+            return new PendingHousingAction(Kind.NEW_ARRIVAL, definition, room, null);
+        }
+
+        private static PendingHousingAction pickBetter(PendingHousingAction current, PendingHousingAction next) {
+            if (current == null) {
+                return next;
+            }
+            if (next == null) {
+                return current;
+            }
+            return next.kind.priority < current.kind.priority ? next : current;
+        }
+
+        private enum Kind {
+            MOVE_IN_EXISTING(0),
+            RESPAWN(1),
+            NEW_ARRIVAL(2);
+
+            private final int priority;
+
+            Kind(int priority) {
+                this.priority = priority;
+            }
+        }
     }
 }

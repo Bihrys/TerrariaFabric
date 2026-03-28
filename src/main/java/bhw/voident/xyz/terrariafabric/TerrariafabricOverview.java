@@ -18,6 +18,8 @@ package bhw.voident.xyz.terrariafabric;
  * <p>- {@code sit/}：坐下系统。{@code TerrariafabricSit} 负责注册事件，{@code SitLogic} 负责半砖和台阶坐下判定、座位复用与朝向，{@code SitSeatEntity} 是不可见座位实体，{@code SitUtil} 保存座位映射，{@code SitConfig} 读取配置。</p>
  * <p>- {@code advancement/}：自定义成就发放入口。</p>
  * <p>- {@code world/time/sleep/}：泰拉式睡觉加速，而不是直接跳过整晚。</p>
+ * <p>- {@code world/evil/}：世界主邪恶类型、感染开关和 hardmode 状态。</p>
+ * <p>- {@code boss/state/}：Boss 击败进度的世界级持久化。</p>
  *
  * <p>客户端目录：</p>
  * <p>- {@code client/TerrariafabricClient.java}：客户端总入口。</p>
@@ -36,6 +38,7 @@ package bhw.voident.xyz.terrariafabric;
  * <p>- 房屋入住提示、自动检测倒计时和检测完成提示。</p>
  * <p>- {@code data/terrariafabric/advancements/} 下的成就资源与“有家可归”发放链路。</p>
  * <p>- 按原 SIT 源码补齐的客户端姿态更新与空座位渲染。</p>
+ * <p>- 结合 Terraria 1.4.4.9 源码新增的世界邪恶状态和 Boss 进度持久化骨架。</p>
  */
 public final class TerrariafabricOverview {
 
