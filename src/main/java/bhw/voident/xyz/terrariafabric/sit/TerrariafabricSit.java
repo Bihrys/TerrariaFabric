@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
+/** 类用途：坐下系统主入口，注册座位实体和交互事件。 */
 public final class TerrariafabricSit {
 
     public static final String MOD_ID = "terrariafabric";

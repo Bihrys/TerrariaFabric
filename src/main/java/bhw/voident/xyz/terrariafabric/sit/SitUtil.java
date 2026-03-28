@@ -10,6 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.HashMap;
 import java.util.Map;
 
+/** 类用途：维护座位实体与原始站位的映射。 */
 public final class SitUtil {
     private static final Map<ResourceKey<Level>, Map<BlockPos, SeatData>> OCCUPIED = new HashMap<>();
 

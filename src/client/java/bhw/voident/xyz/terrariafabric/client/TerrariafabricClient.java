@@ -6,17 +6,13 @@ import bhw.voident.xyz.terrariafabric.entity.TerrariafabricEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
-/**
-
- * 类用途：客户端入口，注册实体渲染。
-
- */
-
+/** 类用途：客户端入口，注册实体渲染和客户端专用逻辑。 */
 public class TerrariafabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(TerrariafabricEntities.GUIDE, GuideRenderer::new);
         EntityRendererRegistry.register(TerrariafabricEntities.MERCHANT, MerchantRenderer::new);
+        TerrariafabricSitClient.register();
     }
 }

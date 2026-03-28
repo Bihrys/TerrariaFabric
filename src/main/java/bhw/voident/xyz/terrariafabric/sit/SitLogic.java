@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/** 类用途：处理坐下、叠坐、潜行下车和坐姿朝向。 */
 public final class SitLogic {
     private static final double SEAT_SEARCH_RADIUS = 0.35D;
     private static final Set<UUID> ACTIVE_SNEAKS = new HashSet<>();

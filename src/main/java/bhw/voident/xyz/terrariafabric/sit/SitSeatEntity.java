@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+/** 类用途：不可见的座位实体，承载坐下状态和下车位置。 */
 public class SitSeatEntity extends Entity {
     public SitSeatEntity(EntityType<? extends SitSeatEntity> type, Level level) {
         super(type, level);

@@ -12,6 +12,7 @@
     "ItemStackMaxStackSizeMixin",
     "ItemStackNoDurabilityMixin",
     "SlotMaxStackSizeMixin",
+    "sit.PlayerEntityMixin",
     "server.PlayerMaxHeartsMixin",
     "server.ServerPlayerGameModeHousingMixin",
     "server.PlayerSleepMixin",
