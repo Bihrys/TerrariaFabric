@@ -3,6 +3,7 @@ package bhw.voident.xyz.terrariafabric;
 import bhw.voident.xyz.terrariafabric.block.TerrariafabricBlocks;
 import bhw.voident.xyz.terrariafabric.command.GuideCommand;
 import bhw.voident.xyz.terrariafabric.command.HouseCommand;
+import bhw.voident.xyz.terrariafabric.command.TownNpcDebugCommand;
 import bhw.voident.xyz.terrariafabric.currency.CoinCurrencySystem;
 import bhw.voident.xyz.terrariafabric.entity.TerrariafabricEntities;
 import bhw.voident.xyz.terrariafabric.item.TerrariafabricItems;
@@ -30,6 +31,7 @@ public class Terrariafabric implements ModInitializer {
 
         HouseCommand.register(); // 注册 /checkhouse。
         GuideCommand.register(); // 注册 /向导。
+        TownNpcDebugCommand.register(); // 注册护士/商人生成诊断命令。
         SleepTimeAccelerator.register(); // 注册睡觉时间加速。
         NpcSpawnScheduler.register(); // 注册房屋和 NPC 调度。
         WorldEvilSystem.register(); // 注册世界主邪恶选择、初始生成和蔓延。

@@ -21,6 +21,7 @@ import java.util.List;
 public final class WorldEvilSystem {
 
     // 首次生成和后续蔓延都走世界级固定预算更新，不让邪恶方块自己高频 random tick。
+    // 想临时提速调试蔓延就改这几组常量。
     private static final int INITIAL_PATCH_INTERVAL = 40;
     private static final int INITIAL_PATCH_ATTEMPTS = 24;
     private static final int INITIAL_PATCH_MIN_DISTANCE = 72;
@@ -63,7 +64,8 @@ public final class WorldEvilSystem {
             return;
         }
 
-        spreadPrimaryEvil(level, state.primaryEvil());
+        spreadActiveEvil(level, EvilBiomeType.CORRUPTION);
+        spreadActiveEvil(level, EvilBiomeType.CRIMSON);
     }
 
     private static void ensurePrimaryEvil(ServerLevel level, WorldEvilState state) {
@@ -135,7 +137,7 @@ public final class WorldEvilSystem {
         return new BlockPos(x, center.getY(), z);
     }
 
-    private static void spreadPrimaryEvil(ServerLevel level, EvilBiomeType type) {
+    private static void spreadActiveEvil(ServerLevel level, EvilBiomeType type) {
         List<ServerPlayer> players = activePlayers(level);
         if (players.isEmpty()) {
             return;

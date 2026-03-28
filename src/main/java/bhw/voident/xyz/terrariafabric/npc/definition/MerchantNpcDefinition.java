@@ -3,14 +3,19 @@ package bhw.voident.xyz.terrariafabric.npc.definition;
 import bhw.voident.xyz.terrariafabric.currency.CoinCurrencySystem;
 import bhw.voident.xyz.terrariafabric.entity.MerchantEntity;
 import bhw.voident.xyz.terrariafabric.entity.TerrariafabricEntities;
+import bhw.voident.xyz.terrariafabric.npc.spawn.TownNpcSpawnLocations;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 
+import java.util.List;
+
 public final class MerchantNpcDefinition implements NpcDefinition {
 
+    private static final int WORLD_SPAWN_RADIUS = 8;
     private static final long REQUIRED_COPPER = 50L * CoinCurrencySystem.COPPER_PER_SILVER;
     private static final String[] FALLBACK_NAMES = new String[]{
             "Alfred",
@@ -87,8 +92,17 @@ public final class MerchantNpcDefinition implements NpcDefinition {
     }
 
     @Override
+    public void appendSpawnDiagnostics(ServerLevel level, List<Component> lines) {
+        long lowestCopper = TownNpcConditions.lowestActivePlayerCopperValue(level);
+        boolean enoughMoney = hasEnoughMoney(level);
+        lines.add(Component.literal("活跃玩家数: " + TownNpcConditions.activePlayerCount(level)));
+        lines.add(Component.literal("最低持币: " + lowestCopper + " 铜 / 需要 > " + REQUIRED_COPPER + " 铜"));
+        lines.add(Component.literal("商人金钱条件: " + (enoughMoney ? "满足" : "不满足")));
+    }
+
+    @Override
     public BlockPos findWorldSpawnPosition(ServerLevel level, ServerPlayer player) {
-        return player.blockPosition();
+        return TownNpcSpawnLocations.findArrivalSpawnPosition(level, player, WORLD_SPAWN_RADIUS, 16);
     }
 
     private boolean hasEnoughMoney(ServerLevel level) {

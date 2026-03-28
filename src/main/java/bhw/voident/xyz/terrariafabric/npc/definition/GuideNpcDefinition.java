@@ -2,13 +2,15 @@ package bhw.voident.xyz.terrariafabric.npc.definition;
 
 import bhw.voident.xyz.terrariafabric.entity.GuideEntity;
 import bhw.voident.xyz.terrariafabric.entity.TerrariafabricEntities;
+import bhw.voident.xyz.terrariafabric.npc.spawn.TownNpcSpawnLocations;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.level.levelgen.Heightmap;
+
+import java.util.List;
 
 public final class GuideNpcDefinition implements NpcDefinition {
 
@@ -58,18 +60,11 @@ public final class GuideNpcDefinition implements NpcDefinition {
 
     @Override
     public BlockPos findWorldSpawnPosition(ServerLevel level, ServerPlayer player) {
-        RandomSource random = level.getRandom();
-        BlockPos base = player.blockPosition();
-        for (int i = 0; i < 16; i++) {
-            int dx = random.nextInt(WORLD_SPAWN_RADIUS * 2 + 1) - WORLD_SPAWN_RADIUS;
-            int dz = random.nextInt(WORLD_SPAWN_RADIUS * 2 + 1) - WORLD_SPAWN_RADIUS;
-            BlockPos candidate = base.offset(dx, 0, dz);
-            BlockPos surface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, candidate);
-            BlockPos spawnPos = surface.above();
-            if (level.getBlockState(spawnPos).isAir()) {
-                return spawnPos;
-            }
-        }
-        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, base).above();
+        return TownNpcSpawnLocations.findArrivalSpawnPosition(level, player, WORLD_SPAWN_RADIUS, 16);
+    }
+
+    @Override
+    public void appendSpawnDiagnostics(ServerLevel level, List<Component> lines) {
+        lines.add(Component.literal("向导属于世界初始城镇 NPC，没有额外解锁条件。"));
     }
 }

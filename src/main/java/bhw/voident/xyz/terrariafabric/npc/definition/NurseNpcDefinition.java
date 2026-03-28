@@ -3,16 +3,21 @@ package bhw.voident.xyz.terrariafabric.npc.definition;
 import bhw.voident.xyz.terrariafabric.entity.MerchantEntity;
 import bhw.voident.xyz.terrariafabric.entity.NurseEntity;
 import bhw.voident.xyz.terrariafabric.entity.TerrariafabricEntities;
+import bhw.voident.xyz.terrariafabric.npc.spawn.TownNpcSpawnLocations;
 import bhw.voident.xyz.terrariafabric.player.TerrariafabricHealth;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 
+import java.util.List;
+
 /** 类用途：护士 NPC 定义，按 Terraria 的基础入住条件接入系统。 */
 public final class NurseNpcDefinition implements NpcDefinition {
 
+    private static final int WORLD_SPAWN_RADIUS = 8;
     private static final int REQUIRED_HEARTS = TerrariafabricHealth.DEFAULT_HEARTS + 1;
     private static final String[] FALLBACK_NAMES = new String[]{
             "Abigail",
@@ -87,8 +92,17 @@ public final class NurseNpcDefinition implements NpcDefinition {
     }
 
     @Override
+    public void appendSpawnDiagnostics(ServerLevel level, List<Component> lines) {
+        boolean merchantActive = TownNpcConditions.hasActiveNpc(level, MerchantEntity.class);
+        int highestHearts = TownNpcConditions.highestActivePlayerHearts(level);
+        lines.add(Component.literal("商人已存在: " + (merchantActive ? "是" : "否")));
+        lines.add(Component.literal("玩家最高心数: " + highestHearts + " / 需要 >= " + REQUIRED_HEARTS));
+        lines.add(Component.literal("护士解锁条件: " + (hasUnlockConditions(level) ? "满足" : "不满足")));
+    }
+
+    @Override
     public BlockPos findWorldSpawnPosition(ServerLevel level, ServerPlayer player) {
-        return player.blockPosition();
+        return TownNpcSpawnLocations.findArrivalSpawnPosition(level, player, WORLD_SPAWN_RADIUS, 16);
     }
 
     private boolean hasUnlockConditions(ServerLevel level) {

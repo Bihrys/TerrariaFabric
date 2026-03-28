@@ -3,11 +3,14 @@ package bhw.voident.xyz.terrariafabric.npc.definition;
 import bhw.voident.xyz.terrariafabric.npc.NpcNames;
 import bhw.voident.xyz.terrariafabric.npc.home.HousingRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+
+import java.util.List;
 
 /**
 
@@ -53,6 +56,9 @@ public interface NpcDefinition {
 
     default boolean canRespawn(ServerLevel level) {
         return true;
+    }
+
+    default void appendSpawnDiagnostics(ServerLevel level, List<Component> lines) {
     }
 
     default void onSpawn(PathfinderMob npc, ServerLevel level) {

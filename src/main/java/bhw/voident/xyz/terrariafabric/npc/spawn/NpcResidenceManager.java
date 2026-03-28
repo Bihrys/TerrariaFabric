@@ -116,32 +116,19 @@ public final class NpcResidenceManager {
             }
 
             NpcWorldState.NpcRecord record = worldState.getOrCreate(definition.id());
-            if (record.pendingRespawn()) {
-                if (definition.needsHousingForRespawn() && !level.isDay()) {
-                    continue;
-                }
-                if (!definition.canRespawn(level)) {
-                    continue;
-                }
-
-                HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
-                if (availableRoom != null) {
-                    pendingAction = PendingHousingAction.pickBetter(
-                            pendingAction,
-                            PendingHousingAction.respawn(definition, availableRoom)
-                    );
-                }
+            TownNpcSpawnJudge.Decision decision = TownNpcSpawnJudge.evaluate(level, definition, record);
+            if (decision == TownNpcSpawnJudge.Decision.WAITING) {
                 continue;
             }
 
-            if (!record.spawnedOnce() && definition.canSpawnNaturally(level)) {
-                HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
-                if (availableRoom != null) {
-                    pendingAction = PendingHousingAction.pickBetter(
-                            pendingAction,
-                            PendingHousingAction.newArrival(definition, availableRoom)
-                    );
-                }
+            HousingRegistry.RoomRecord availableRoom = registry.findAvailableRoomFor(level, definition);
+            if (availableRoom != null) {
+                pendingAction = PendingHousingAction.pickBetter(
+                        pendingAction,
+                        decision == TownNpcSpawnJudge.Decision.RESPAWN
+                                ? PendingHousingAction.respawn(definition, availableRoom)
+                                : PendingHousingAction.newArrival(definition, availableRoom)
+                );
             }
         }
 
@@ -175,12 +162,11 @@ public final class NpcResidenceManager {
             return null;
         }
 
-        BlockPos spawnPos = HouseDetector.findSpawnPositionInRoom(level, room.min(), room.max());
-        if (spawnPos == null || !level.hasChunkAt(room.center())) {
+        if (!level.hasChunkAt(room.center())) {
             return null;
         }
 
-        PathfinderMob spawned = spawn(level, definition, spawnPos);
+        PathfinderMob spawned = trySpawnForRoom(level, definition, room);
         if (spawned == null) {
             return null;
         }
@@ -189,6 +175,22 @@ public final class NpcResidenceManager {
         NpcWorldState.get(level).setTrackedEntity(definition.id(), spawned.getUUID());
         handleNpcMovedIn(level, definition, spawned);
         return spawned;
+    }
+
+    private static PathfinderMob trySpawnForRoom(ServerLevel level, NpcDefinition definition, HousingRegistry.RoomRecord room) {
+        BlockPos roomSpawnPos = HouseDetector.findSpawnPositionInRoom(level, room.min(), room.max());
+        if (roomSpawnPos != null) {
+            PathfinderMob roomSpawned = spawn(level, definition, roomSpawnPos);
+            if (roomSpawned != null) {
+                return roomSpawned;
+            }
+        }
+
+        BlockPos fallbackSpawnPos = findFallbackSpawnPosition(level, definition);
+        if (fallbackSpawnPos != null) {
+            return spawn(level, definition, fallbackSpawnPos);
+        }
+        return null;
     }
 
     private static void applyPendingAction(ServerLevel level, HousingRegistry registry, PendingHousingAction action) {
@@ -213,6 +215,19 @@ public final class NpcResidenceManager {
         ensureDisplayName(level, definition, npc);
         definition.onSpawn(npc, level);
         return npc;
+    }
+
+    private static BlockPos findFallbackSpawnPosition(ServerLevel level, NpcDefinition definition) {
+        for (ServerPlayer player : level.players()) {
+            if (player.isSpectator()) {
+                continue;
+            }
+            BlockPos spawnPos = definition.findWorldSpawnPosition(level, player);
+            if (spawnPos != null && level.hasChunkAt(spawnPos)) {
+                return spawnPos;
+            }
+        }
+        return null;
     }
 
     private static void maintainRoomPosition(PathfinderMob npc, HousingRegistry.RoomRecord room) {
