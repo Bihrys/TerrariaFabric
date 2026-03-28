@@ -83,7 +83,7 @@ public final class MerchantNpcDefinition implements NpcDefinition {
 
     @Override
     public boolean canRespawn(ServerLevel level) {
-        return hasEnoughMoney(level);
+        return TownNpcConditions.hasUnlocked(level, id()) || hasEnoughMoney(level);
     }
 
     @Override
